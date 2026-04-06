@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Product1 from "../../assets/svg-img/jewelry-stand.svg";
-import Product2 from "../../assets/svg-img/beautiful-luxury.svg";
-import Product3 from "../../assets/svg-img/jewelry-watch.svg";
-import Product4 from "../../assets/svg-img/jewelry-watch.svg";
-import Product5 from "../../assets/svg-img/luxury-necklace-jewelry.svg";
-import Product6 from "../../assets/svg-img/jewelry-stand.svg";
+import Product1 from "../../assets/svg-img/webp/jewelry-stand.webp";
+import Product2 from "../../assets/svg-img/webp/beautiful-luxury.jpg";
+import Product3 from "../../assets/svg-img/webp/jewelry-watch.jpg";
+
+import Product5 from "../../assets/svg-img/webp/luxury-necklace-jewelry.webp";
+
 import HomeButton from "../../components/button";
 
 const ProductNav = [
@@ -36,7 +36,7 @@ const TrendingProducts = [
     product: "Gold Chain Necklace",
     decription: "Simple, bold, and easy to style.",
     price: "28,000",
-    image: Product4,
+    image: Product3,
   },
   {
     product: "Gold Chain Necklace",
@@ -48,7 +48,7 @@ const TrendingProducts = [
     product: "Gold Chain Necklace",
     decription: "Simple, bold, and easy to style.",
     price: "28,000",
-    image: Product6,
+    image: Product1,
   },
 ];
 

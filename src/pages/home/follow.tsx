@@ -1,7 +1,7 @@
-import Facebook from "../../assets/svg-img/Testimonials.svg";
-import Instagram from "../../assets/svg-img/TestimonialsInstagram.svg";
-import Tiktok from "../../assets/svg-img/TestimonialsTiktok.svg";
-import Twitter from "../../assets/svg-img/TestimonialsFB.svg";
+import Facebook from "../../assets/svg-img/webp/Testimonials.jpg";
+import Instagram from "../../assets/svg-img/webp/TestimonialsInstagram.webp.jpg";
+import Tiktok from "../../assets/svg-img/webp/TestimonialsTiktok.webp.jpg";
+import Twitter from "../../assets/svg-img/webp/TestimonialsFB.webp.jpg";
 
 const FollowImg = [
   { Imag: Facebook },
@@ -26,7 +26,7 @@ const Follow = () => {
             <img
               src={item.Imag}
               alt={`Follow us ${index + 1}`}
-              className="w-full transition-all duration-500"
+              className="w-full transition-all duration-500 rounded-xl hover:opacity-90"
             />
           </div>
         ))}

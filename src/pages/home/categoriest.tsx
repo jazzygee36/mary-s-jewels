@@ -2,9 +2,9 @@ import Grown from "../../assets/svg-img/crown.svg";
 import Glass from "../../assets/svg-img/glass.svg";
 import Delivery from "../../assets/svg-img/truck.svg";
 import Card from "../../assets/svg-img/card-pos.svg";
-import Earing from "../../assets/svg-img/CategoryFrame.svg";
-import Ring from "../../assets/svg-img/RingFrame.svg";
-import FrameWatch from "../../assets/svg-img/FrameWatch.svg";
+import Earing from "../../assets/svg-img/webp/CategoryFrame.jpg"; 
+import Ring from "../../assets/svg-img/webp/RingFrame.jpg";
+import FrameWatch from "../../assets/svg-img/webp/FrameWatch.jpg";
 
 const WhyShop = [
   {
