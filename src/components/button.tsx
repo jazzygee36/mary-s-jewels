@@ -2,12 +2,22 @@ interface ButtonProps {
   title: string;
   bg: string;
   className?: string;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
-const HomeButton = ({ title, bg, className }: ButtonProps) => {
+const HomeButton = ({
+  title,
+  bg,
+  className,
+  onClick,
+  disabled,
+}: ButtonProps) => {
   return (
     <button
       style={{ backgroundColor: bg }}
+      onClick={onClick}
+      disabled={disabled}
       className={`
         cursor-pointer
         transition-all
@@ -17,8 +27,7 @@ const HomeButton = ({ title, bg, className }: ButtonProps) => {
         hover:shadow-lg
         active:scale-95
         ${className || ""}
-      `}
-    >
+      `}>
       {title}
     </button>
   );

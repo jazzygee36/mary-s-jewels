@@ -1,11 +1,11 @@
-import Banner from "../../assets/svg-img/LandingPage.svg";
+import Banner from "../../assets/svg-img/webp/LandingPage.webp";
 import HomeButton from "../../components/button";
-import GroupWatch from "../../assets/svg-img/GroupWatch.svg";
+import GroupWatch from "../../assets/svg-img/webp/Groupwatch.webp";
 import About from "./about";
-import Product from "./product";
+import Product from "../../components/product";
 import Categoriest from "./categoriest";
 import Testomonies from "./testimony";
-import Follow from "./follow";
+import Follow from "../../components/follow";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 
@@ -35,8 +35,8 @@ const Home = () => {
                 />
                 <HomeButton
                   title={"See all Collections"}
-                  bg={"transparent"}
-                  className="py-[14px] px-[40px] text-[17px] text-white border border-white rounded-full font-semibold text-[15px] md:text-[17.5px] w-full md:w-auto"
+                  bg={""}
+                  className="bg-[#FFAA92] md:bg-transparent py-[14px] px-[40px] text-[17px] text-[#4C0213] md:text-white border border-white rounded-full font-semibold text-[15px] md:text-[17.5px] w-full md:w-auto"
                 />
               </div>
             </div>
