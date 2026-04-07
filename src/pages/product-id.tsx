@@ -8,18 +8,13 @@ import Follow from "../components/follow";
 import Footer from "../components/footer";
 import Cart from "./cart";
 import RightDrawer from "../components/drawer";
-import { useAppContext } from "../components/context/app-context";
+import { useAppContext } from "../context/app-context";
 
-// type ProductType = {
-//   product: string;
-//   price: string;
-//   image: string;
-//   decription: string;
-//   color?: string;
-//   quantity?: number;
-// };
-
-const Color = [{ name: "Black" }, { name: "Gold" }, { name: "Silver" }];
+const colors = [
+  { name: "Black" },
+  { name: "Gold" },
+  { name: "Silver" },
+];
 
 const ProductId = () => {
   const {
@@ -37,22 +32,28 @@ const ProductId = () => {
 
   const [selectedColor, setSelectedColor] = useState("Black");
 
-  if (!product) return <p>Product not found</p>;
+  if (!product) {
+    return <p className="text-center mt-10">Product not found</p>;
+  }
 
   const isAddedToCart = cartItems.some(
-    (item) => item.product === product.product && item.color === selectedColor,
+    (item) =>
+      item.product === product.product &&
+      item.color === selectedColor
   );
 
   const handleCartClick = () => {
     if (isAddedToCart) {
       setDrawerOpen(true);
-    } else {
-      addToCart({
-        ...product,
-        color: selectedColor,
-        quantity,
-      });
+      return;
     }
+
+    addToCart({
+      ...product,
+      price: Number(product.price),
+      color: selectedColor,
+      quantity,
+    });
   };
 
   return (
@@ -74,7 +75,7 @@ const ProductId = () => {
               </h1>
 
               <span className="text-[36px] font-bold font-vastago text-[#4C0213]">
-                ₦{product.price}
+                ₦{Number(product.price).toLocaleString()}
               </span>
 
               <p className="text-[20px] text-[#404041] font-geist">
@@ -82,30 +83,33 @@ const ProductId = () => {
               </p>
             </div>
 
-            {/* Colors */}
+            {/* Color Selector */}
             <div className="flex items-center gap-4">
-              {Color.map((item, index) => (
-                <div
+              {colors.map((item, index) => (
+                <button
                   key={index}
+                  type="button"
                   onClick={() => setSelectedColor(item.name)}
-                  className={`rounded-lg py-[10px] px-[15px] flex items-center justify-center cursor-pointer border border-[#3A3D38]/18 ${
+                  className={`rounded-lg py-[10px] px-[15px] flex items-center justify-center cursor-pointer border border-[#3A3D38]/18 transition ${
                     selectedColor === item.name
                       ? "bg-[#3A3D38] text-white font-bold"
                       : "bg-[#F8F5F0] text-[#303030]"
-                  }`}>
+                  }`}
+                >
                   <span>{item.name}</span>
-                </div>
+                </button>
               ))}
             </div>
 
-            {/* Quantity + Cart */}
+            {/* Quantity + Add to Cart */}
             <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
               {/* Quantity Selector */}
               <div className="bg-[#F5F5F5] w-full rounded-[12px] py-4 px-6 flex items-center justify-center gap-4">
                 <button
                   type="button"
                   onClick={decrement}
-                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
+                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                >
                   <SubtractionIcon />
                 </button>
 
@@ -116,7 +120,8 @@ const ProductId = () => {
                 <button
                   type="button"
                   onClick={increment}
-                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
+                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                >
                   <AdditionIcon />
                 </button>
               </div>
@@ -141,13 +146,14 @@ const ProductId = () => {
       <Follow />
       <Footer />
 
-      {/* Drawer */}
+      {/* Cart Drawer */}
       <RightDrawer
         title={`${cartItems.length} item${
           cartItems.length > 1 ? "s" : ""
         } in cart`}
         isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}>
+        onClose={() => setDrawerOpen(false)}
+      >
         <Cart />
       </RightDrawer>
     </>

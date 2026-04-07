@@ -24,37 +24,37 @@ const TrendingProducts = [
   {
     product: "Gold Chain Necklace",
     decription: "Simple, bold, and easy to style.",
-    price: "20,000",
+    price: 20000,
     image: Product1,
   },
   {
     product: "Minimal Ring Set",
     decription: "Simple, bold, and easy to style.",
-    price: "28,000",
+    price: 28000,
     image: Product2,
   },
   {
     product: "A timeless piece only for you",
     decription: "Simple, bold, and easy to style.",
-    price: "28,000",
+    price: 28000,
     image: Product3,
   },
   {
     product: "Gold Chain Necklace",
     decription: "Simple, bold, and easy to style.",
-    price: "28,000",
+    price: 28000,
     image: Product3,
   },
   {
     product: "Gold Chain Necklace",
     decription: "Simple, bold, and easy to style.",
-    price: "28,000",
+    price: 28000,
     image: Product5,
   },
   {
     product: "Minimal Ring Set",
     decription: "Simple, bold, and easy to style.",
-    price: "98,000",
+    price: 98000,
     image: Product1,
   },
 ];

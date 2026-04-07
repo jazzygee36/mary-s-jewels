@@ -6,14 +6,14 @@ import CloseToggle from "../assets/svg-img/close-icon.svg";
 
 const leftNav = [
   { title: "About Us", path: "/" },
-  { title: "Collections", path: "/collections" },
+  { title: "Collections", path: "/3" },
   { title: "Products", path: "/products" },
 ];
 
 const rightNav = [
   { title: "Account", path: "/account" },
-  { title: "Search", path: "/search" },
-  { title: "Bag", path: "/bag" },
+  { title: "Search", path: "/" },
+  { title: "Bag", path: "/" },
 ];
 
 const Header = () => {

@@ -28,7 +28,6 @@ const RightDrawer = ({
 
   return (
     <>
-      {/* Overlay */}
       <div
         className={`fixed w-full md:w-[50%] inset-0 bg-black/40 transition-opacity duration-300 ${
           isOpen
@@ -38,14 +37,13 @@ const RightDrawer = ({
         onClick={onClose}
       />
 
-      {/* Drawer */}
       <div
         className={`p-2 md:p-10  fixed top-0 right-0 h-full bg-white shadow-lg transition-transform duration-500 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         } ${width} flex flex-col`}>
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between  border-b">
+          <div className="flex items-center justify-between  border-b pb-[20px]">
             <h2 className="text-lg font-semibold">{title}</h2>
 
             <div onClick={onClose}>

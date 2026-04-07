@@ -1,11 +1,12 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 type ProductType = {
-  [x: string]: string;
   product: string;
-  price: string;
+  price: number;
   image: string;
   decription: string;
+  color?: string;
+  quantity?: number;
 };
 
 type AppContextType = {
@@ -17,6 +18,7 @@ type AppContextType = {
   quantity: number;
   increment: () => void;
   decrement: () => void;
+  subtotal: number;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -28,13 +30,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const increment = () => setQuantity((prev) => prev + 1);
 
-  const decrement = () =>
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  const decrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   const addToCart = (item: ProductType) => {
     setCartItems((prev) => {
       const alreadyExists = prev.some(
-        (cartItem) => cartItem.product === item.product
+        (cartItem) => cartItem.product === item.product,
       );
 
       if (alreadyExists) return prev;
@@ -49,6 +50,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setCartItems((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const subtotal = cartItems.reduce((total, item) => {
+    const price = Number(item.price) || 0;
+    const quantity = Number(item.quantity) || 1;
+
+    return total + price * quantity;
+  }, 0);
+
   return (
     <AppContext.Provider
       value={{
@@ -60,8 +68,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         quantity,
         increment,
         decrement,
-      }}
-    >
+        subtotal,
+      }}>
       {children}
     </AppContext.Provider>
   );
