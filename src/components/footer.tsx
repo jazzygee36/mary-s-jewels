@@ -10,8 +10,8 @@ const Footer = () => {
       </h1>
       <div className="w-full md:w-[35%] py-4 md:py-[28px]">
         <span className="text-[#1C1817] font-geist text-[14px] md:text-[16px] leading-tight">
-          <span className="font-bold">Nigeria Office:</span> 21 Adebayo Roseey
-          Street, Victoria Island, Behind ShopRite, Lagos State
+          <span className="font-bold">Nigeria Office:</span> Gl gate shop, LB
+          03, trade fair complex, Lagos, Nigeria. 
         </span>
       </div>
       <div className="mb-[60px] flex flex-col gap-4 md:gap-[10px]">

@@ -12,7 +12,7 @@ const ContactInfo = () => {
           label="Email Address"
           placeholder="Enter your email "
         />
-        <div className="flex flex-col md:flex-row items-center gap-2">
+        <div className="flex flex-col md:flex-row items-center gap-2 w-full">
           <HomeInput
             type={"text"}
             label="First Name"

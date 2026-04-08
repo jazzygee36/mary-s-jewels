@@ -16,14 +16,14 @@ const HomeInput = ({
   className
 }: HomeInputProps) => {
   return (
-    <div>
+    <div className="w-full">
       <label className="text-[14px] font-geist text-[#303030]">{label}</label>
       <input
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={className || "border border-[#D0D5DD] rounded-[7px] py-[11px] md:py-[20px] px-[18px] w-full mt-2 focus:outline-none focus:ring-2 focus:ring-[#4C0213]/50 transition-all duration-300 placeholder:text-[#767676] placeholder:text-[14px] font-geist"}
+        className={className || "border border-[#D0D5DD] rounded-[7px] py-[11px] md:py-[16px] px-[18px] w-full mt-2 focus:outline-none focus:ring-2 focus:ring-[#4C0213]/50 transition-all duration-300 placeholder:text-[#767676] placeholder:text-[14px] font-geist"}
       />
     </div>
   );
