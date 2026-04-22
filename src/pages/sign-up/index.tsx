@@ -27,7 +27,7 @@ const SignUp = () => {
         <HomeInput type="password" label="Password" placeholder="Password" />
 
         <HomeInput
-          type="text"
+          type="password"
           label="Confirm Password"
           placeholder="Confirm Password"
         />
