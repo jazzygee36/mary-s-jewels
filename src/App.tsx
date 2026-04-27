@@ -3,8 +3,10 @@ import Home from "./pages/home";
 import AllCollection from "./pages/all-collections";
 import ProductId from "./pages/product-id";
 import OrderSummary from "./pages/order/order-summary";
-import Account from "./pages/account/account";
-import SignUp from "./pages/sign-up";
+
+import ProtectedRoute from "./auth/protected-route";
+import SignUp from "./pages/account/sign-up";
+import Login from "./pages/account/login";
 
 function App() {
   return (
@@ -12,11 +14,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/register" element={<SignUp />} />
         <Route path="/all-collections" element={<AllCollection />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductId />} />
-        <Route path="/order-summary" element={<OrderSummary />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/order-summary" element={<OrderSummary />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
