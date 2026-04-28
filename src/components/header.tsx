@@ -1,25 +1,51 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; // <- import useLocation
+import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/svg-img/logo.svg";
 import Toggle from "../assets/svg-img/toggleIcon.svg";
 import CloseToggle from "../assets/svg-img/close-icon.svg";
+import { useAppContext } from "../context/app-context";
+import { useAuth } from "../auth/AuthContext";
 
-const leftNav = [
+type NavItem = {
+  title: string;
+  path: string;
+  protected?: boolean;
+  showCount?: boolean;
+};
+
+const leftNav: NavItem[] = [
   { title: "About Us", path: "/" },
   { title: "Collections", path: "/3" },
   { title: "Products", path: "/products" },
 ];
 
-const rightNav = [
-  { title: "Account", path: "/account" },
+const rightNav: NavItem[] = [
+  // { title: "Login", path: "/login" },
   { title: "Search", path: "/" },
-  { title: "Bag", path: "/" },
+  { title: "Bag", path: "/order-summary" },
 ];
 
 const Header = () => {
-  const location = useLocation(); // <- get current route
+  const { auth, syncAuth } = useAuth();
+  const { cartItems } = useAppContext();
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [openMenu, setOpenMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const handleAuthClick = () => {
+    if (auth.isAuthenticated) {
+      sessionStorage.removeItem("token");
+
+      syncAuth();
+
+      navigate("/login");
+    } else {
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,45 +56,71 @@ const Header = () => {
   }, []);
 
   const getBackground = () => {
-    // Example: homepage is transparent until scroll, other routes always dark
     if (location.pathname === "/home") {
-      return scrolled ? "bg-[#4C0213] shadow-md text-white" : "bg-transparent text-white";
+      return scrolled
+        ? "bg-[#4C0213] shadow-md text-white"
+        : "bg-transparent text-white";
     }
     return "bg-[#4C0213] text-white";
   };
 
   return (
     <header
-      className={`w-full px-4 md:px-10 py-4 fixed top-0 left-0 z-50 transition-all duration-300 ${getBackground()}`}
-    >
-      {/* Desktop Header */}
+      className={`w-full px-4 md:px-10 py-4 fixed top-0 left-0 z-50 transition-all duration-300 ${getBackground()}`}>
       <div className="hidden md:grid grid-cols-3 items-center">
         <nav className="flex items-center gap-6 justify-start">
           {leftNav.map((item, index) => (
             <a
               key={index}
               href={item.path}
-              className="text-sm md:text-base hover:opacity-70 transition"
-            >
+              className="text-sm md:text-base hover:opacity-70 transition">
               {item.title}
             </a>
           ))}
         </nav>
 
         <div className="flex justify-center">
-          <img src={Logo} alt="logo" />
+          <Link to="/">
+            <img src={Logo} alt="logo" />
+          </Link>
         </div>
 
         <nav className="flex items-center gap-6 justify-end">
-          {rightNav.map((item, index) => (
-            <a
-              key={index}
-              href={item.path}
-              className="text-sm md:text-base hover:opacity-70 transition"
-            >
-              {item.title}
-            </a>
-          ))}
+          {rightNav.map((item, index) => {
+            const isBag = item.title === "Bag";
+
+            if (isBag) {
+              return (
+                <button
+                  key={index}
+                  onClick={() =>
+                    navigate(auth.isAuthenticated ? item.path : "/login")
+                  }
+                  className="text-sm md:text-base hover:opacity-70 transition">
+                  {item.title}
+                  <span className="ml-2 text-sm font-bold text-white bg-red-500 px-2 rounded">
+                    {Array.isArray(cartItems) ? cartItems.length : 0}
+                  </span>
+                </button>
+              );
+            }
+
+            return (
+              <button
+                key={index}
+                onClick={() => navigate(item.path)}
+                className="text-sm md:text-base hover:opacity-70 transition">
+                {item.title}
+              </button>
+            );
+          })}
+
+          {/* AUTH BUTTON */}
+          <button
+            onClick={handleAuthClick}
+            className="text-sm md:text-base hover:opacity-70 transition bg-[#4C0216] text-white px-4 py-2 rounded">
+            {auth.isAuthenticated ? "Logout" : "Login"}
+          </button>
         </nav>
       </div>
 
@@ -77,22 +129,45 @@ const Header = () => {
         <img src={Logo} alt="logo" className="w-[200px]" />
 
         <button onClick={() => setOpenMenu(!openMenu)}>
-          {openMenu ? <img src={CloseToggle} alt="close" /> : <img src={Toggle} alt="toggle" />}
+          {openMenu ? (
+            <img src={CloseToggle} alt="close" />
+          ) : (
+            <img src={Toggle} alt="toggle" />
+          )}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {openMenu && (
         <div className="md:hidden mt-2 bg-white text-[#4C0213] rounded-xl p-4 space-y-4 h-screen w-full">
-          {[...leftNav, ...rightNav].map((item, index) => (
-            <a
-              key={index}
-              href={item.path}
-              className="block font-semibold text-[18px] hover:opacity-70"
-            >
-              {item.title}
-            </a>
-          ))}
+          {[...leftNav, ...rightNav].map((item, index) => {
+            const isBag = item.title === "Bag";
+
+            if (isBag) {
+              return (
+                <button
+                  key={index}
+                  onClick={() =>
+                    navigate(auth.isAuthenticated ? item.path : "/login")
+                  }
+                  className="block font-semibold text-[18px] hover:opacity-70">
+                  {item.title}
+                  <span className="ml-2 text-sm">
+                    ({cartItems?.length ?? 0})
+                  </span>
+                </button>
+              );
+            }
+
+            return (
+              <Link
+                key={index}
+                to={item.path}
+                className="block font-semibold text-[18px] hover:opacity-70">
+                {item.title}
+              </Link>
+            );
+          })}
         </div>
       )}
     </header>

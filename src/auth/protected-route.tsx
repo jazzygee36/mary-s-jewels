@@ -7,7 +7,7 @@ const ProtectedRoute = () => {
   const location = useLocation();
 
   if (auth.isLoading) {
-    return <div>Loading...</div>; // or spinner
+    return <div>Loading...</div>; 
   }
 
   if (!auth.isAuthenticated) {

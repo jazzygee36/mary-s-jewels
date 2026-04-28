@@ -6,10 +6,13 @@ type AuthState = {
   isLoading: boolean;
 };
 
-const AuthContext = createContext<{
+type AuthContextType = {
   auth: AuthState;
   setAuth: React.Dispatch<React.SetStateAction<AuthState>>;
-} | null>(null);
+  syncAuth: () => void;
+};
+
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: any) => {
   const [auth, setAuth] = useState<AuthState>({
@@ -18,18 +21,28 @@ export const AuthProvider = ({ children }: any) => {
     isLoading: true,
   });
 
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+  const syncAuth = () => {
+    const token = sessionStorage.getItem("token");
 
     setAuth({
       user: null,
       isAuthenticated: !!token,
       isLoading: false,
     });
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    syncAuth();
+
+    const handleStorage = () => syncAuth();
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth, syncAuth }}>
       {children}
     </AuthContext.Provider>
   );

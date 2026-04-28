@@ -9,6 +9,7 @@ import Footer from "../components/footer";
 import Cart from "./cart";
 import RightDrawer from "../components/drawer";
 import { useAppContext } from "../context/app-context";
+import Header from "../components/header";
 
 const colors = [
   { name: "Black" },
@@ -58,8 +59,9 @@ const ProductId = () => {
 
   return (
     <>
+    <Header/>
       <div className="p-4 md:p-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mt-10">
           {/* Product Image */}
           <img
             src={product.image}

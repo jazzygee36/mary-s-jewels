@@ -14,9 +14,11 @@ import BackArrow from "../../assets/icons/back-arrow";
 import { UserLogin } from "../../api/login";
 import { loginFormSchema, type LoginFormData } from "../../utils/validation";
 import Toast from "../../components/toast";
+import { useAuth } from "../../auth/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { syncAuth } = useAuth();
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info";
@@ -38,10 +40,9 @@ const Login = () => {
         type: "success",
       });
 
-      if (data.accessToken) {
-        sessionStorage.setItem("token", data.accessToken);
-        navigate("/order-summary");
-      }
+      sessionStorage.setItem("token", data.accessToken);
+      syncAuth();
+      navigate("/");
     },
     onError: (error: any) => {
       const message =

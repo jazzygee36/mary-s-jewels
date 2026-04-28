@@ -8,7 +8,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 
   if (auth.isLoading) return <div>Loading...</div>;
 
-  return auth.isAuthenticated ? <Navigate to="/order-summary" /> : children;
+  return auth.isAuthenticated ? <Navigate to="/" /> : children;
 };
 
 export default PublicRoute;
