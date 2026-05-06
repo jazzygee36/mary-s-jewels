@@ -15,9 +15,8 @@ type AppContextType = {
   removeFromCart: (index: number) => void;
   drawerOpen: boolean;
   setDrawerOpen: (value: boolean) => void;
-  quantity: number;
-  increment: () => void;
-  decrement: () => void;
+  incrementItem: (index: number) => void;
+  decrementItem: (index: number) => void;
   subtotal: number;
 };
 
@@ -26,21 +25,22 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<ProductType[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [quantity, setQuantity] = useState(1);
-
-  const increment = () => setQuantity((prev) => prev + 1);
-
-  const decrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   const addToCart = (item: ProductType) => {
     setCartItems((prev) => {
-      const alreadyExists = prev.some(
-        (cartItem) => cartItem.product === item.product,
+      const existing = prev.find(
+        (p) => p.product === item.product && p.color === item.color,
       );
 
-      if (alreadyExists) return prev;
+      if (existing) {
+        return prev.map((p) =>
+          p.product === item.product && p.color === item.color
+            ? { ...p, quantity: (p.quantity || 1) + (item.quantity || 1) }
+            : p,
+        );
+      }
 
-      return [...prev, item];
+      return [...prev, { ...item, quantity: item.quantity || 1 }];
     });
 
     setDrawerOpen(true);
@@ -57,6 +57,27 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     return total + price * quantity;
   }, 0);
 
+  const incrementItem = (index: number) => {
+    setCartItems((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, quantity: (item.quantity || 1) + 1 } : item,
+      ),
+    );
+  };
+
+  const decrementItem = (index: number) => {
+    setCartItems((prev) =>
+      prev.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              quantity: Math.max((item.quantity || 1) - 1, 1),
+            }
+          : item,
+      ),
+    );
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -65,9 +86,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         removeFromCart,
         drawerOpen,
         setDrawerOpen,
-        quantity,
-        increment,
-        decrement,
+        // quantity,
+        incrementItem,
+        decrementItem,
         subtotal,
       }}>
       {children}

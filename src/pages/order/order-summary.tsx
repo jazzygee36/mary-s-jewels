@@ -8,7 +8,7 @@ import Header from "../../components/header";
 import ContactInfo from "./contact-info";
 
 const OrderSummary = () => {
-  const { cartItems, quantity, increment, decrement, subtotal } =
+  const { cartItems, decrementItem, incrementItem, subtotal } =
     useAppContext();
   return (
     <div>
@@ -49,18 +49,18 @@ const OrderSummary = () => {
                         <div className="bg-[#F5F5F5] w-[80%] md:w-full rounded-[12px] py-1 px-6 flex items-center justify-center gap-4">
                           <button
                             type="button"
-                            onClick={decrement}
+                           onClick={() => decrementItem(index)}
                             className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
                             <SubtractionIcon />
                           </button>
 
                           <span className="text-[20px] font-bold text-[#303030] font-geist mx-2">
-                            {quantity}
+                            {item.quantity || 1}
                           </span>
 
                           <button
                             type="button"
-                            onClick={increment}
+                           onClick={() => incrementItem(index)}
                             className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
                             <AdditionIcon />
                           </button>

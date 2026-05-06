@@ -1,43 +1,149 @@
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+
 import HomeButton from "../../components/button";
+import Follow from "../../components/follow";
+import Footer from "../../components/footer";
+import Header from "../../components/header";
 import HomeInput from "../../components/input";
 import BackArrow from "../../assets/icons/back-arrow";
+import { signupFormSchema, type SignUpFormData } from "../../utils/validation";
+import Toast from "../../components/toast";
+import { useAuth } from "../../auth/AuthContext";
+import { Register } from "../../api/register";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const { syncAuth } = useAuth();
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>({
+    resolver: zodResolver(signupFormSchema),
+  });
+
+  const mutation = useMutation({
+    mutationFn: Register,
+    onSuccess: (data) => {
+      setToast({
+        message: data.message || "Successfully registered.",
+        type: "success",
+      });
+
+      sessionStorage.setItem("token", data.accessToken);
+      syncAuth();
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500); // 1.5 seconds
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong ❌";
+
+      setToast({
+        message,
+        type: "error",
+      });
+    },
+  });
+
+  const onSubmit = (data: SignUpFormData) => {
+    mutation.mutate(data);
+  };
+
   return (
-    <div
-      //   onClick={() => setActiveTab("register")}
-      className={` p-4  md:p-0 w-full cursor-pointer transition-all duration-300`}>
-      <BackArrow />
+    <div className="bg-[#F5F4F0] min-h-screen flex flex-col">
+      <Header />
 
-      <h2 className="text-[#111111] text-[28px] font-vastago font-semibold mt-[40px]">
-        Register
-      </h2>
+      <div className="flex-1 flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          <div className="p-6 md:p-10 bg-white shadow-md rounded-lg">
+            <BackArrow />
 
-      <p className="text-[#4B4B4B] text-[14px]">
-        Enter your personal data to create your account.
-      </p>
+            <h2 className="text-[18px] md:text-[28px] font-semibold mt-5">
+              Register
+            </h2>
 
-      <form className="mt-[20px] flex flex-col space-y-[10px]">
-        <HomeInput
-          type="text"
-          label="Email Address"
-          placeholder="Email Address"
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="mt-5 flex flex-col space-y-3">
+              {/* EMAIL */}
+              <HomeInput
+                type="text"
+                label="Email Address"
+                placeholder="Email Address"
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs">{errors.email.message}</p>
+              )}
+
+              {/* PASSWORD */}
+              <HomeInput
+                type="password"
+                label="Password"
+                placeholder="Password"
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-xs">
+                  {errors.password.message}
+                </p>
+              )}
+
+              <HomeInput
+                type="password"
+                label="Re-enter Password"
+                placeholder="Re-enter Password"
+                {...register("confirmPassword")}
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+
+              {/* BUTTON */}
+              <HomeButton
+                title={mutation.isPending ? "Signing up..." : "Register "}
+                bg="#4C0213"
+                className="text-white rounded-full py-3 mt-4"
+              />
+            </form>
+
+            <div
+              className="text-sm text-center my-3 cursor-pointer"
+              onClick={() => navigate("/login")}>
+              Have an account?{" "}
+              <span className="font-semibold hover:underline">Login</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* TOAST */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
         />
-
-        <HomeInput type="password" label="Password" placeholder="Password" />
-
-        <HomeInput
-          type="password"
-          label="Confirm Password"
-          placeholder="Confirm Password"
-        />
-
-        <HomeButton
-          title="Register"
-          bg="#4C0213"
-          className="text-white rounded-[100px] py-[14px] mt-4"
-        />
-      </form>
+      )}
+      <Follow />
+      <Footer />
     </div>
   );
 };

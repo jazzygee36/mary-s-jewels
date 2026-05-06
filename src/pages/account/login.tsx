@@ -42,8 +42,12 @@ const Login = () => {
 
       sessionStorage.setItem("token", data.accessToken);
       syncAuth();
-      navigate("/");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1500); // 1.5 seconds
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       const message =
         error?.response?.data?.message ||
@@ -109,8 +113,13 @@ const Login = () => {
               />
             </form>
 
-            <div className="text-sm text-center my-5">
-              Lost your password? <span className="font-semibold">Recover</span>
+            <div className="text-sm text-center my-3 cursor-pointer">
+              Lost your password?{" "}
+              <span className="font-semibold  hover:underline">Recover</span>
+            </div>
+            <div className="text-sm text-center my-3 cursor-pointer" onClick={() => navigate('/register')}>
+              Don't have an account?{" "}
+              <span className="font-semibold hover:underline">Signup</span>
             </div>
           </div>
         </div>

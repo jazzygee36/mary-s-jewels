@@ -11,23 +11,20 @@ import RightDrawer from "../components/drawer";
 import { useAppContext } from "../context/app-context";
 import Header from "../components/header";
 
-const colors = [
-  { name: "Black" },
-  { name: "Gold" },
-  { name: "Silver" },
-];
+const colors = [{ name: "Black" }, { name: "Gold" }, { name: "Silver" }];
 
 const ProductId = () => {
   const {
     addToCart,
     cartItems,
-    quantity,
-    increment,
-    decrement,
+
     drawerOpen,
     setDrawerOpen,
   } = useAppContext();
+  const [quantity, setQuantity] = useState(1);
 
+  const increment = () => setQuantity((prev) => prev + 1);
+  const decrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
   const location = useLocation();
   const product = location.state?.product;
 
@@ -38,9 +35,7 @@ const ProductId = () => {
   }
 
   const isAddedToCart = cartItems.some(
-    (item) =>
-      item.product === product.product &&
-      item.color === selectedColor
+    (item) => item.product === product.product && item.color === selectedColor,
   );
 
   const handleCartClick = () => {
@@ -59,7 +54,7 @@ const ProductId = () => {
 
   return (
     <>
-    <Header/>
+      <Header />
       <div className="p-4 md:p-10">
         <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mt-10">
           {/* Product Image */}
@@ -96,8 +91,7 @@ const ProductId = () => {
                     selectedColor === item.name
                       ? "bg-[#3A3D38] text-white font-bold"
                       : "bg-[#F8F5F0] text-[#303030]"
-                  }`}
-                >
+                  }`}>
                   <span>{item.name}</span>
                 </button>
               ))}
@@ -110,8 +104,7 @@ const ProductId = () => {
                 <button
                   type="button"
                   onClick={decrement}
-                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
-                >
+                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
                   <SubtractionIcon />
                 </button>
 
@@ -122,8 +115,7 @@ const ProductId = () => {
                 <button
                   type="button"
                   onClick={increment}
-                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
-                >
+                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
                   <AdditionIcon />
                 </button>
               </div>
@@ -154,8 +146,7 @@ const ProductId = () => {
           cartItems.length > 1 ? "s" : ""
         } in cart`}
         isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
+        onClose={() => setDrawerOpen(false)}>
         <Cart />
       </RightDrawer>
     </>
