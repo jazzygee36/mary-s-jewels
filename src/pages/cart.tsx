@@ -36,8 +36,9 @@ const Cart = () => {
                     <div className="bg-[#F5F5F5] w-[80%] md:w-full rounded-[12px] py-1 px-6 flex items-center justify-center gap-4">
                       <button
                         type="button"
-                       onClick={() => decrementItem(index)}
-                        className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
+                        onClick={() => decrementItem(index)}
+                        className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                      >
                         <SubtractionIcon />
                       </button>
 
@@ -48,7 +49,8 @@ const Cart = () => {
                       <button
                         type="button"
                         onClick={() => incrementItem(index)}
-                        className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
+                        className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                      >
                         <AdditionIcon />
                       </button>
                     </div>
@@ -57,7 +59,7 @@ const Cart = () => {
 
                 <div className="flex flex-col justify-around">
                   <p className="text-[#303030] text-[18px] font-semibold font-geist">
-                    ₦{item.price}
+                    ₦{(item.price * (item.quantity || 1)).toLocaleString()}
                   </p>
 
                   <HomeButton
@@ -81,7 +83,7 @@ const Cart = () => {
             Subtotal
           </p>
           <span className="text-[#303030] text-[20px] font-semibold font-geist">
-            ₦{subtotal}
+            ₦{subtotal.toLocaleString()}
           </span>
         </div>
         <Link to="/order-summary" className="block">

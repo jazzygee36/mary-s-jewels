@@ -8,8 +8,7 @@ import Header from "../../components/header";
 import ContactInfo from "./contact-info";
 
 const OrderSummary = () => {
-  const { cartItems, decrementItem, incrementItem, subtotal } =
-    useAppContext();
+  const { cartItems, decrementItem, incrementItem, subtotal } = useAppContext();
   return (
     <div>
       <Header />
@@ -49,8 +48,9 @@ const OrderSummary = () => {
                         <div className="bg-[#F5F5F5] w-[80%] md:w-full rounded-[12px] py-1 px-6 flex items-center justify-center gap-4">
                           <button
                             type="button"
-                           onClick={() => decrementItem(index)}
-                            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
+                            onClick={() => decrementItem(index)}
+                            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                          >
                             <SubtractionIcon />
                           </button>
 
@@ -60,8 +60,9 @@ const OrderSummary = () => {
 
                           <button
                             type="button"
-                           onClick={() => incrementItem(index)}
-                            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
+                            onClick={() => incrementItem(index)}
+                            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                          >
                             <AdditionIcon />
                           </button>
                         </div>
@@ -70,7 +71,7 @@ const OrderSummary = () => {
 
                     <div className="flex flex-col ">
                       <p className="text-[#303030] text-[18px] font-semibold font-geist">
-                        ₦{item.price}
+                        ₦{item.price * (item.quantity || 1)}
                       </p>
                     </div>
                   </div>
@@ -82,7 +83,7 @@ const OrderSummary = () => {
                   Subtotal
                 </p>
                 <span className="text-[#303030] text-[18px] font-semibold font-geist">
-                  ₦{subtotal}
+                  ₦{subtotal.toLocaleString()}
                 </span>
               </div>
 
@@ -96,17 +97,16 @@ const OrderSummary = () => {
                 </span>
               </div>
             </div>
-            <HomeButton
+            {/* <HomeButton
               title="Place Order"
               bg="#4C0213"
               // onClick={() => removeFromCart(index)}
               className="text-white text-[13px] md:text-[16px] font-geist font-bold rounded-full px-[17px] py-[6px] md:py-[8px] transition-all duration-300"
-            />
+            /> */}
           </div>
         </div>
 
         <div className="border-none md:border border-[#E4E7EC] p-4 md:p-[25px] rounded-[11.67px]">
-         
           <ContactInfo />
         </div>
       </div>

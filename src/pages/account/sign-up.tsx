@@ -43,7 +43,7 @@ const SignUp = () => {
       syncAuth();
 
       setTimeout(() => {
-        navigate("/login");
+        navigate("/");
       }, 1500); // 1.5 seconds
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

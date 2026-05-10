@@ -15,14 +15,14 @@ type NavItem = {
 };
 
 const leftNav: NavItem[] = [
-  { title: "About Us", path: "/" },
-  { title: "Collections", path: "/3" },
-  { title: "Products", path: "/products" },
+  { title: "About Us", path: "#about" },
+  { title: "Collections", path: "#collections" },
+  { title: "Products", path: "#products" },
 ];
 
 const rightNav: NavItem[] = [
   // { title: "Login", path: "/login" },
-  { title: "Search", path: "/" },
+  // { title: "Search", path: "/" },
   { title: "Bag", path: "/order-summary" },
 ];
 

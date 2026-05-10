@@ -4,6 +4,7 @@ interface ButtonProps {
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const HomeButton = ({
@@ -12,11 +13,13 @@ const HomeButton = ({
   className,
   onClick,
   disabled,
+  type
 }: ButtonProps) => {
   return (
     <button
       style={{ backgroundColor: bg }}
       onClick={onClick}
+      type={type}
       disabled={disabled}
       className={`
         cursor-pointer

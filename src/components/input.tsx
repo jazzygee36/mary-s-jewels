@@ -1,8 +1,8 @@
 import React, { useState, forwardRef } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import clsx from "clsx";
 
-interface HomeInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface HomeInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
 }
 
@@ -14,24 +14,27 @@ const HomeInput = forwardRef<HTMLInputElement, HomeInputProps>(
 
     return (
       <div className="w-full">
+        {/* Label */}
         {label && (
           <label className="text-[14px] font-geist text-[#303030]">
             {label}
           </label>
         )}
 
+        {/* Input Wrapper */}
         <div className="relative mt-2">
           <input
             ref={ref}
             type={isPassword ? (showPassword ? "text" : "password") : type}
             placeholder={placeholder}
-            className={
-              className ||
-              "border border-[#D0D5DD] rounded-[7px] py-[11px] md:py-[16px] px-[18px] pr-[45px] w-full focus:outline-none focus:ring-2 focus:ring-[#4C0213]/50 transition-all duration-300 placeholder:text-[#767676] placeholder:text-[14px] font-geist"
-            }
+            className={clsx(
+              "border border-[#D0D5DD] rounded-[7px] py-[11px] md:py-[16px] px-[18px] pr-[45px] w-full focus:outline-none  transition-all duration-300 placeholder:text-[#767676] placeholder:text-[14px] font-geist",
+              className,
+            )}
             {...rest}
           />
 
+          {/* Password toggle */}
           {isPassword && (
             <button
               type="button"
@@ -44,7 +47,7 @@ const HomeInput = forwardRef<HTMLInputElement, HomeInputProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 HomeInput.displayName = "HomeInput";

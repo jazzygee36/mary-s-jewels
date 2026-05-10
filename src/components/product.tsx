@@ -63,7 +63,7 @@ const Product = ({ seeAll = true, className }: ProductProps) => {
   const [activeTab, setActiveTab] = useState("/trending");
 
   return (
-    <div className={`p-4 md:p-[47px] ${className}`}>
+    <div id="products" className={`p-4 md:p-[47px] ${className}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           {ProductNav.map((item, index) => (

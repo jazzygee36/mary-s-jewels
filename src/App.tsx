@@ -7,10 +7,12 @@ import OrderSummary from "./pages/order/order-summary";
 import ProtectedRoute from "./auth/protected-route";
 import SignUp from "./pages/account/sign-up";
 import Login from "./pages/account/login";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home />} />

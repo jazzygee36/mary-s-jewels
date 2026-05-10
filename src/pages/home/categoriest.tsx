@@ -2,7 +2,7 @@ import Grown from "../../assets/svg-img/crown.svg";
 import Glass from "../../assets/svg-img/glass.svg";
 import Delivery from "../../assets/svg-img/truck.svg";
 import Card from "../../assets/svg-img/card-pos.svg";
-import Earing from "../../assets/svg-img/webp/CategoryFrame.jpg"; 
+import Earing from "../../assets/svg-img/webp/CategoryFrame.jpg";
 import Ring from "../../assets/svg-img/webp/RingFrame.jpg";
 import FrameWatch from "../../assets/svg-img/webp/FrameWatch.jpg";
 
@@ -48,7 +48,7 @@ const Categories = [
 
 const Categoriest = () => {
   return (
-    <div className="bg-[#E5E5E5] p-4 md:p-[48px] ">
+    <div id="collections" className="bg-[#E5E5E5] p-4 md:p-[48px] ">
       <div>
         <h1 className="text-[14px] md:text-[25px]  font-semibold font-geist  text-[#4C0213] mb-[30px]">
           Shop by Category

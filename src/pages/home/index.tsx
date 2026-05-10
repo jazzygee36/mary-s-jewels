@@ -14,7 +14,8 @@ const Home = () => {
     <>
       <div
         className="bg-cover bg-center bg-no-repeat h-screen w-full flex flex-col items-center justify-center"
-        style={{ backgroundImage: `url(${Banner})` }}>
+        style={{ backgroundImage: `url(${Banner})` }}
+      >
         <>
           <Header />
           <div className="w-[80%] md:w-full">
