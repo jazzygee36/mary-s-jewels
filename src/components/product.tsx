@@ -10,13 +10,14 @@ import GlobalError from "./global-error";
 interface ProductProps {
   seeAll?: boolean;
   className?: string;
+  category: "trending" | "best-sellers" | "popular";
 }
 
 const ProductNav = [
-  { title: "Trending", path: "/trending" },
-  { title: "Best Sellers", path: "/best-sellers" },
-  { title: "Popular", path: "/popular" },
-];
+  { title: "Trending", value: "trending" },
+  { title: "Best Sellers", value: "best-selling" },
+  { title: "Popular", value: "popular" },
+] as const;
 
 interface Product {
   _id: string;
@@ -39,14 +40,13 @@ const Product = ({ seeAll = true, className }: ProductProps) => {
     queryFn: getAllProducts,
   });
 
-  const [activeTab, setActiveTab] = useState("/trending");
+  const [activeTab, setActiveTab] = useState<
+    "trending" | "best-selling" | "popular"
+  >("trending");
 
-  if (isLoading)
-    return (
-      <p>
-        <Spinner />
-      </p>
-    );
+  const filteredProducts = allproducts
+    ?.filter((p) => p.category === activeTab)
+    .slice(0, 6);
 
   if (isError)
     return <GlobalError message="Failed to load products" onRetry={refetch} />;
@@ -58,9 +58,9 @@ const Product = ({ seeAll = true, className }: ProductProps) => {
           {ProductNav.map((item, index) => (
             <span
               key={index}
-              onClick={() => setActiveTab(item.path)}
+              onClick={() => setActiveTab(item.value)}
               className={`text-[18px] text-[#76404E] font-geist cursor-pointer ${
-                activeTab === item.path ? "font-bold" : ""
+                activeTab === item.value && "font-bold  "
               }`}
             >
               {item.title}
@@ -82,7 +82,7 @@ const Product = ({ seeAll = true, className }: ProductProps) => {
             <Spinner />
           </div>
         ) : (
-          allproducts?.map((product, index) => (
+          filteredProducts?.map((product, index) => (
             <div
               key={index}
               className="flex flex-col gap-4 transition-all duration-300 hover:-translate-y-2  rounded-2xl cursor-pointer"
