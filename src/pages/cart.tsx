@@ -17,19 +17,19 @@ const Cart = () => {
               <div className="flex justify-between w-full rounded-2xl mb-10">
                 <div className="flex gap-2 md:gap-8">
                   <img
-                    src={item.image}
-                    alt={item.product}
-                    className="bg-[#E5E5E5] rounded-2xl w-[100px] md:w-[150px] h-[100px] md:h-[150px] object-cover p-4"
+                    src={item?.image}
+                    alt={item?.productName}
+                    className="bg-[#E5E5E5] rounded-2xl w-[100px] md:w-[150px] h-[100px] md:h-[150px] object-cover "
                   />
 
                   <div className="flex flex-col w-full justify-between">
                     <div>
                       <h3 className="text-[#303030] text-[14px] md:text-[18px] font-semibold font-geist truncate w-[170px] md:w-[180px]  ">
-                        {item.product}
+                        {item?.productName}
                       </h3>
 
                       <p className="text-[#767676] text-[13px] md:text-[16px] font-geist truncate w-[170px] md:w-[200px]  ">
-                        {item.decription}
+                        {item?.description}
                       </p>
                     </div>
 
@@ -59,7 +59,7 @@ const Cart = () => {
 
                 <div className="flex flex-col justify-around">
                   <p className="text-[#303030] text-[18px] font-semibold font-geist">
-                    ₦{(item.price * (item.quantity || 1)).toLocaleString()}
+                    ₦{(item?.amount * (item.quantity || 1)).toLocaleString()}
                   </p>
 
                   <HomeButton
