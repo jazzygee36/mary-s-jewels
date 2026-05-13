@@ -61,6 +61,16 @@ const Product = ({ seeAll = true, className }: ProductProps) => {
   if (isError)
     return <GlobalError message="Failed to load products" onRetry={refetch} />;
 
+  if (isLoading)
+    return (
+      <p>
+        <Spinner />
+      </p>
+    );
+
+  if (isError)
+    return <GlobalError message="Failed to load products" onRetry={refetch} />;
+
   return (
     <div id="products" className={`p-4 md:p-[47px] ${className}`}>
       <div className="flex items-center justify-between">
