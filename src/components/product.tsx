@@ -82,7 +82,7 @@ const Product = ({ seeAll = true, className }: ProductProps) => {
             <Spinner />
           </div>
         ) : (
-          filteredProducts?.map((product, index) => (
+          filteredProducts?.slice(0, 6).map((product, index) => (
             <div
               key={index}
               className="flex flex-col gap-4 transition-all duration-300 hover:-translate-y-2  rounded-2xl cursor-pointer"
