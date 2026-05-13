@@ -56,7 +56,7 @@ const Home = () => {
         </>
       </div>
       <About />
-      <Product />
+      <Product category={"trending"} />
       <Categoriest />
       <Testomonies />
       <Follow />
