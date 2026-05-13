@@ -10,7 +10,7 @@ import GlobalError from "./global-error";
 interface ProductProps {
   seeAll?: boolean;
   className?: string;
-  category: "trending" | "best-sellers" | "popular";
+  // category: "trending" | "best-selling" | "popular";
 }
 
 const ProductNav = [
