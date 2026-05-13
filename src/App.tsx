@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from "./pages/home";
 import AllCollection from "./pages/all-collections";
 import ProductId from "./pages/product-id";
@@ -14,8 +14,8 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<Home />} />
+        {/* <Route path="/" element={<Navigate to="/" replace />} /> */}
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/all-collections" element={<AllCollection />} />
         <Route path="/login" element={<Login />} />
