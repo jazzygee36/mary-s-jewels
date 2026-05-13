@@ -6,9 +6,24 @@ import Follow from "../../components/follow";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import ContactInfo from "./contact-info";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { orderFormSchema, type OrderFormData } from "../../utils/validation";
 
 const OrderSummary = () => {
   const { cartItems, decrementItem, incrementItem, subtotal } = useAppContext();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<OrderFormData>({
+    resolver: zodResolver(orderFormSchema),
+  });
+
+  const onsubmit = (data: OrderFormData) => {
+    // Handle order placement logic here
+    console.log("Order placed with data:", data);
+  };
   return (
     <div>
       <Header />
@@ -30,18 +45,18 @@ const OrderSummary = () => {
                     <div className="flex gap-2 md:gap-8">
                       <img
                         src={item.image}
-                        alt={item.product}
-                        className="bg-[#E5E5E5] rounded-2xl w-[100px] md:w-[150px] h-[100px] md:h-[150px] object-cover p-4"
+                        alt={item?.productName}
+                        className="bg-[#E5E5E5] rounded-2xl w-[100px] md:w-[150px] h-[100px] md:h-[150px] object-cover p-0"
                       />
 
                       <div className="flex flex-col w-full justify-between">
                         <div>
                           <h3 className="text-[#303030] text-[14px] md:text-[18px] font-semibold font-geist truncate w-[150px] md:w-[180px]  ">
-                            {item.product}
+                            {item?.productName}
                           </h3>
 
                           <p className="text-[#767676] text-[10px] md:text-[13px] font-geist truncate w-[150px] md:w-[200px]  ">
-                            {item.decription}
+                            {item?.description}
                           </p>
                         </div>
 
@@ -71,7 +86,7 @@ const OrderSummary = () => {
 
                     <div className="flex flex-col ">
                       <p className="text-[#303030] text-[18px] font-semibold font-geist">
-                        ₦{item.price * (item.quantity || 1)}
+                        ₦{item?.amount * (item.quantity || 1)}
                       </p>
                     </div>
                   </div>
@@ -97,17 +112,23 @@ const OrderSummary = () => {
                 </span>
               </div>
             </div>
-            {/* <HomeButton
+            <HomeButton
               title="Place Order"
               bg="#4C0213"
+              onClick={() => handleSubmit(onsubmit)()}
               // onClick={() => removeFromCart(index)}
               className="text-white text-[13px] md:text-[16px] font-geist font-bold rounded-full px-[17px] py-[6px] md:py-[8px] transition-all duration-300"
-            /> */}
+            />
           </div>
         </div>
 
         <div className="border-none md:border border-[#E4E7EC] p-4 md:p-[25px] rounded-[11.67px]">
-          <ContactInfo />
+          <ContactInfo
+            register={register}
+            handleSubmit={handleSubmit}
+            errors={errors}
+            onsubmit={onsubmit}
+          />
         </div>
       </div>
       <Follow />

@@ -1,21 +1,19 @@
-import HomeButton from "../../components/button";
 import HomeInput from "../../components/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { orderFormSchema, type OrderFormData } from "../../utils/validation";
-import { clsx } from "clsx";
-const ContactInfo = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<OrderFormData>({
-    resolver: zodResolver(orderFormSchema),
-  });
 
-  const onsubmit = (data: OrderFormData) => {
-    // Handle order placement logic here
-  };
+interface ContactInfoProps {
+  register: any;
+  handleSubmit: any;
+  onsubmit: any;
+  errors: any;
+}
+
+import { clsx } from "clsx";
+const ContactInfo = ({
+  register,
+  handleSubmit,
+  onsubmit,
+  errors,
+}: ContactInfoProps) => {
   return (
     <form onSubmit={handleSubmit(onsubmit)}>
       <p className="text-[20px] text-[#101928] font-vastago font-semibold">
@@ -126,13 +124,13 @@ const ContactInfo = () => {
             )}
           />
         </div>
-        <HomeButton
+        {/* <HomeButton
           title="Place Order"
           bg="#4C0213"
           type="submit"
           // onClick={() => removeFromCart(index)}
           className="text-white text-[13px] md:text-[16px] font-geist font-bold rounded-full px-[17px] py-[6px] md:py-[8px] transition-all duration-300"
-        />
+        /> */}
       </div>
     </form>
   );

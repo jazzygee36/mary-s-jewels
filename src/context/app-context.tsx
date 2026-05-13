@@ -1,10 +1,16 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 type ProductType = {
-  product: string;
-  price: number;
+  productName: string;
+  amount: number;
   image: string;
-  decription: string;
+  description: string;
   color?: string;
   quantity?: number;
 };
@@ -23,18 +29,23 @@ type AppContextType = {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [cartItems, setCartItems] = useState<ProductType[]>([]);
+  const [cartItems, setCartItems] = useState<ProductType[]>(() => {
+    if (typeof window === "undefined") return [];
+
+    const stored = localStorage.getItem("cartItems");
+    return stored ? JSON.parse(stored) : [];
+  });
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const addToCart = (item: ProductType) => {
     setCartItems((prev) => {
       const existing = prev.find(
-        (p) => p.product === item.product && p.color === item.color,
+        (p) => p?.productName === item?.productName && p.color === item.color,
       );
 
       if (existing) {
         return prev.map((p) =>
-          p.product === item.product && p.color === item.color
+          p?.productName === item?.productName && p.color === item.color
             ? { ...p, quantity: (p.quantity || 1) + (item.quantity || 1) }
             : p,
         );
@@ -51,10 +62,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const subtotal = cartItems.reduce((total, item) => {
-    const price = Number(item.price) || 0;
+    const amount = Number(item.amount) || 0;
     const quantity = Number(item.quantity) || 1;
 
-    return total + price * quantity;
+    return total + amount * quantity;
   }, 0);
 
   const incrementItem = (index: number) => {
@@ -78,6 +89,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   return (
     <AppContext.Provider
       value={{
@@ -90,7 +105,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         incrementItem,
         decrementItem,
         subtotal,
-      }}>
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
