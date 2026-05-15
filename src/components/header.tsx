@@ -71,13 +71,16 @@ const Header = () => {
       <div className="hidden md:grid grid-cols-3 items-center">
         <nav className="flex items-center gap-6 justify-start">
           {leftNav.map((item, index) => (
-            <a
+            <Link
+              to={`/${item.path}`}
               key={index}
-              href={item.path}
+              // onClick={() => {
+              //   navigate(`/${item.path}`);
+              // }}
               className="text-sm md:text-base hover:opacity-70 transition"
             >
               {item.title}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -131,7 +134,9 @@ const Header = () => {
 
       {/* Mobile Header */}
       <div className="flex md:hidden items-center justify-between">
-        <img src={Logo} alt="logo" className="w-[200px]" />
+        <Link to="/">
+          <img src={Logo} alt="logo" className="w-[200px]" />
+        </Link>
 
         <button onClick={() => setOpenMenu(!openMenu)}>
           {openMenu ? (
@@ -166,13 +171,16 @@ const Header = () => {
             }
 
             return (
-              <Link
+              <button
                 key={index}
-                to={item.path}
+                onClick={() => {
+                  navigate(`/${item.path}`);
+                  setOpenMenu(false);
+                }}
                 className="block font-semibold text-[18px] hover:opacity-70"
               >
                 {item.title}
-              </Link>
+              </button>
             );
           })}
         </div>

@@ -59,7 +59,7 @@ const Cart = () => {
 
                 <div className="flex flex-col justify-around">
                   <p className="text-[#303030] text-[18px] font-semibold font-geist">
-                    ₦{(item?.amount * (item.quantity || 1)).toLocaleString()}
+                    ₦{(item?.amount * (item?.quantity || 1)).toLocaleString()}
                   </p>
 
                   <HomeButton

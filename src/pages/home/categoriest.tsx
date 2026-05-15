@@ -53,12 +53,13 @@ const Categoriest = () => {
         <h1 className="text-[14px] md:text-[25px]  font-semibold font-geist  text-[#4C0213] mb-[30px]">
           Shop by Category
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-[50px] mb-[50px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-[10px] lg:gap-[50px] mb-[50px]">
           {Categories.map((item, index) => (
             <div
               key={index}
               className="bg-cover bg-center bg-no-repeat h-[200px] md:h-[400px] w-full flex items-end justify-center rounded-2xl shadow-md pb-4 md:pb-6 relative overflow-hidden"
-              style={{ backgroundImage: `url(${item?.backgroundImg})` }}>
+              style={{ backgroundImage: `url(${item?.backgroundImg})` }}
+            >
               <div className="absolute inset-0 bg-black/20" />
               <h2 className="text-[14px] md:text-[24px] font-bold text-white relative z-10 border border-white px-4 py-2 rounded-lg w-full text-center mx-4">
                 {item?.title}
@@ -71,17 +72,18 @@ const Categoriest = () => {
         <h1 className="text-[14px] md:text-[25px]  font-semibold font-geist text-[#4C0213] mb-[30px]">
           Why Shop with us
         </h1>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-[30px]">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-[30px]">
           {WhyShop.map((item, index) => (
             <div
               key={index}
-              className="bg-[#4C0213] p-4 md:p-[24px] rounded-2xl shadow-md ">
-              <img src={item.img} alt={item.title} className="mb-[50px]" />
+              className="bg-[#4C0213] p-4 md:p-[24px] rounded-2xl shadow-md "
+            >
+              <img src={item?.img} alt={item.title} className="mb-[50px]" />
               <h2 className="text-[14px] md:text-[24px] font-bold text-[#ffffff] mb-[10px]">
-                {item.title}
+                {item?.title}
               </h2>
               <p className="text-[12px] md:text-[20px] text-[#ffffff] font-geists">
-                {item.description}
+                {item?.description}
               </p>
             </div>
           ))}
