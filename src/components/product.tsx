@@ -86,13 +86,13 @@ const Product = ({ seeAll = true, className }: ProductProps) => {
           </Link>
         )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8">
         {isLoading ? (
           <div>
             <Spinner />
           </div>
         ) : (
-          filteredProducts?.slice(0, 6).map((product, index) => (
+          filteredProducts?.map((product, index) => (
             <div
               key={index}
               className="flex flex-col gap-4 transition-all duration-300 hover:-translate-y-2  rounded-2xl cursor-pointer"

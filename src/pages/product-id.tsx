@@ -57,13 +57,13 @@ const ProductId = () => {
   return (
     <>
       <Header />
-      <div className="p-4 md:p-10 mt-4 md:mt-10">
+      <div className="p-4 md:p-10 mt-8 md:mt-10">
         <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mt-10">
           {/* Product Image */}
           <img
             src={product.image}
             alt={product.product}
-            className="w-[250px] h-[262px] md:w-[377px] md:h-[396px] object-cover rounded-2xl mx-auto"
+            className="w-[350px] h-[362px] md:w-[377px] md:h-[396px] object-cover rounded-2xl mx-auto"
           />
 
           {/* Product Details */}

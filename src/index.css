@@ -1,10 +1,18 @@
-@import url("https://fonts.example.com/vastago-grotesk.css");
-
+/* @import url("https://fonts.example.com/vastago-grotesk.css"); */
 
 @import "tailwindcss";
-@theme {
-  --font-vastago: "Vastago Grotesk", sans-serif;
-  --font-geist: "Geist", sans-serif;
+@font-face {
+  font-family: "Vastago Grotesk";
+  src: url("/fonts/VastagoGrotesk.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
 }
 
 @keyframes slideRight {

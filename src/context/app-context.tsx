@@ -13,6 +13,7 @@ type ProductType = {
   description: string;
   color?: string;
   quantity?: number;
+  _id?: string;
 };
 
 type AppContextType = {
@@ -24,6 +25,9 @@ type AppContextType = {
   incrementItem: (index: number) => void;
   decrementItem: (index: number) => void;
   subtotal: number;
+  setCartItems: (
+    items: ProductType[] | ((prev: ProductType[]) => ProductType[]),
+  ) => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -105,6 +109,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         incrementItem,
         decrementItem,
         subtotal,
+        setCartItems,
       }}
     >
       {children}
