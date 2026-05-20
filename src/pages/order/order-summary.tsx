@@ -131,9 +131,9 @@ const OrderSummary = () => {
               value: data.email,
             },
           ],
-          cartItems,
-          shipping: data,
-          subtotal,
+          // cartItems,
+          // shipping: data,
+          // subtotal,
         },
         onSuccess: async (transaction: { reference: string }) => {
           console.log(transaction);
