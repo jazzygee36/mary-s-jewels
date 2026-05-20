@@ -15,9 +15,11 @@ import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import Toast from "../../components/toast";
 import { getUser } from "../../api/me";
-import { createPayment } from "../../api/create-payment";
+// import { createPayment } from "../../api/create-payment";
 import GlobalError from "../../components/global-error";
 import Spinner from "../../components/spinner";
+import PaystackPop from "@paystack/inline-js";
+// import PaystackPop from "@paystack/inline-js";
 
 interface User {
   _id: string;
@@ -49,7 +51,23 @@ const OrderSummary = () => {
     type: "success" | "error" | "info";
   } | null>(null);
 
-  // const mutation = useMutation({
+  const verifyPayment = async (reference: string) => {
+    try {
+      const res = await fetch("http://localhost:5000/payments/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reference }),
+      });
+
+      return await res.json();
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+
   //   mutationFn: createOrder,
   //   onSuccess: (data) => {
   //     setToast({
@@ -78,29 +96,82 @@ const OrderSummary = () => {
   //   },
   // });
 
-  const paymentMutation = useMutation({
-    mutationFn: createPayment,
-    onSuccess: (data) => {
-      window.location.href = data?.data?.cashierUrl;
-    },
-  });
+  // const paymentMutation = useMutation({
+  //   mutationFn: createPayment,
+  //   onSuccess: (data) => {
+  //     window.location.href = data?.data?.cashierUrl;
+  //   },
+  // });
 
-  const handlePayment = (data: OrderFormData) => {
+  const handlePayment = async (data: OrderFormData) => {
     if (!user?._id || !user?.email) return;
 
-    const payload = {
-      amount: subtotal.toString(),
-      currency: "NGN",
-      orderId: `ORDER_${user._id}_${Date.now()}`,
-      email: user.email,
-      customer: user._id,
-      metadata: {
-        ...data,
-        items: cartItems,
-      },
-    };
+    try {
+      const paystack = new PaystackPop();
+      const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
 
-    paymentMutation.mutate(payload);
+      if (!PAYSTACK_KEY) {
+        throw new Error("Missing Paystack public key");
+      }
+
+      paystack.newTransaction({
+        key: PAYSTACK_KEY,
+
+        email: user.email,
+
+        amount: subtotal * 100,
+
+        currency: "NGN",
+
+        metadata: {
+          custom_fields: [
+            {
+              display_name: "Customer Name",
+              variable_name: "customer_name",
+              value: data.email,
+            },
+          ],
+          cartItems,
+          shipping: data,
+          subtotal,
+        },
+        onSuccess: async (transaction: { reference: string }) => {
+          console.log(transaction);
+
+          const result = await verifyPayment(transaction.reference);
+
+          const isSuccess =
+            result?.status === true ||
+            result?.data?.status === "success" ||
+            result?.success === true;
+          if (isSuccess) {
+            setToast({
+              message: "Payment verified 🎉",
+              type: "success",
+            });
+          } else {
+            setToast({
+              message: "Payment verification failed",
+              type: "error",
+            });
+          }
+        },
+
+        onCancel: () => {
+          setToast({
+            message: "Payment cancelled",
+            type: "info",
+          });
+        },
+      });
+    } catch (error) {
+      console.log(error);
+
+      setToast({
+        message: "Something went wrong",
+        type: "error",
+      });
+    }
   };
 
   if (isLoading)
