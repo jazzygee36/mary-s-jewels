@@ -8,8 +8,27 @@ import Testomonies from "./testimony";
 import Follow from "../../components/follow";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const Home = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 100); // small delay fixes render timing issue
+      }
+    }
+  }, [location]);
   return (
     <>
       <div
@@ -55,9 +74,16 @@ const Home = () => {
           </div>
         </>
       </div>
-      <About />
-      <Product />
-      <Categoriest />
+      <div id="about">
+        <About />
+      </div>
+      <div id="products">
+        <Product />
+      </div>
+
+      <div id="collections">
+        <Categoriest />
+      </div>
       <Testomonies />
       <Follow />
       <Footer />

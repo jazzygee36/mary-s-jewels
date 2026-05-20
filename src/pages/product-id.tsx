@@ -35,7 +35,9 @@ const ProductId = () => {
   }
 
   const isAddedToCart = cartItems.some(
-    (item) => item.product === product.product && item.color === selectedColor,
+    (item) =>
+      item?.productName === product?.productName &&
+      item.color === selectedColor,
   );
 
   const handleCartClick = () => {
@@ -46,7 +48,7 @@ const ProductId = () => {
 
     addToCart({
       ...product,
-      price: Number(product.price),
+      amount: Number(product.amount) || 0,
       color: selectedColor,
       quantity,
     });
@@ -55,28 +57,28 @@ const ProductId = () => {
   return (
     <>
       <Header />
-      <div className="p-4 md:p-10">
+      <div className="p-4 md:p-10 mt-8 md:mt-10">
         <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mt-10">
           {/* Product Image */}
           <img
             src={product.image}
             alt={product.product}
-            className="w-[250px] h-[262px] md:w-[377px] md:h-[396px] object-cover rounded-2xl mx-auto"
+            className="w-[350px] h-[362px] md:w-[377px] md:h-[396px] object-cover rounded-2xl mx-auto"
           />
 
           {/* Product Details */}
           <div className="flex flex-col gap-12">
             <div>
-              <h1 className="text-[24px] md:text-[32px] font-normal text-[#303030] font-geist">
-                {product.product}
+              <h1 className="text-[24px] md:text-[27px] font-semibold text-[#303030] font-geist">
+                {product?.productName}
               </h1>
 
               <span className="text-[36px] font-bold font-vastago text-[#4C0213]">
-                ₦{Number(product.price).toLocaleString()}
+                ₦{Number(product?.amount || 0).toLocaleString()}
               </span>
 
-              <p className="text-[20px] text-[#404041] font-geist">
-                {product.decription}
+              <p className="text-sm text-[#404041] font-geist">
+                {product?.description}
               </p>
             </div>
 
@@ -91,7 +93,8 @@ const ProductId = () => {
                     selectedColor === item.name
                       ? "bg-[#3A3D38] text-white font-bold"
                       : "bg-[#F8F5F0] text-[#303030]"
-                  }`}>
+                  }`}
+                >
                   <span>{item.name}</span>
                 </button>
               ))}
@@ -104,7 +107,8 @@ const ProductId = () => {
                 <button
                   type="button"
                   onClick={decrement}
-                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
+                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                >
                   <SubtractionIcon />
                 </button>
 
@@ -115,7 +119,8 @@ const ProductId = () => {
                 <button
                   type="button"
                   onClick={increment}
-                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200">
+                  className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                >
                   <AdditionIcon />
                 </button>
               </div>
@@ -128,7 +133,7 @@ const ProductId = () => {
                     ? "bg-gray-400 cursor-pointer"
                     : "bg-[#4C0213] hover:opacity-80"
                 }`}
-                title={isAddedToCart ? "Go to Cart" : "Add to Cart"}
+                title={isAddedToCart ? "Added to Cart" : "Add to Cart"}
                 bg=""
               />
             </div>
@@ -146,7 +151,8 @@ const ProductId = () => {
           cartItems.length > 1 ? "s" : ""
         } in cart`}
         isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}>
+        onClose={() => setDrawerOpen(false)}
+      >
         <Cart />
       </RightDrawer>
     </>

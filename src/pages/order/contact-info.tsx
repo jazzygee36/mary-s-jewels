@@ -1,23 +1,22 @@
 import HomeButton from "../../components/button";
 import HomeInput from "../../components/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { orderFormSchema, type OrderFormData } from "../../utils/validation";
-import { clsx } from "clsx";
-const ContactInfo = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<OrderFormData>({
-    resolver: zodResolver(orderFormSchema),
-  });
 
-  const onsubmit = (data: OrderFormData) => {
-    // Handle order placement logic here
-  };
+interface ContactInfoProps {
+  register: any;
+  handleSubmit: any;
+  handlePayment: any;
+  errors: any;
+}
+
+import { clsx } from "clsx";
+const ContactInfo = ({
+  register,
+  handleSubmit,
+  handlePayment,
+  errors,
+}: ContactInfoProps) => {
   return (
-    <form onSubmit={handleSubmit(onsubmit)}>
+    <form onSubmit={handleSubmit(handlePayment)}>
       <p className="text-[20px] text-[#101928] font-vastago font-semibold">
         Contact Information
       </p>
@@ -56,11 +55,35 @@ const ContactInfo = () => {
           />
         </div>
         <div className="flex flex-col md:flex-row items-center gap-2">
-          <HomeInput
-            type={"text"}
+          {/* <HomeInput
+            type="tel"
             label="Phone Number"
-            placeholder="Enter your phone number "
-            {...register("phoneNumber")}
+            placeholder="Enter your phone number"
+            {...register("phoneNumber", {
+              required: "Phone number is required",
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "Only numbers are allowed",
+              },
+            })}
+            className={clsx(
+              "border",
+              errors.phoneNumber ? "border-red-500" : "border-[#D0D5DD]",
+            )}
+          /> */}
+          <HomeInput
+            type="text"
+            label="Phone Number"
+            placeholder="Enter your Phone Number"
+            {...register("phoneNumber", {
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "Only numbers are allowed",
+              },
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, "");
+              },
+            })}
             className={clsx(
               "border",
               errors.phoneNumber ? "border-red-500" : "border-[#D0D5DD]",
@@ -84,10 +107,18 @@ const ContactInfo = () => {
       <div className="mt-[20px] flex flex-col space-y-[10px] md:space-y-[20px]">
         <div className="flex flex-col md:flex-row items-center gap-2">
           <HomeInput
-            type={"text"}
+            type="text"
             label="Street No."
-            placeholder="Enter your Street No. "
-            {...register("streetNumber")}
+            placeholder="Enter your Street No."
+            {...register("streetNumber", {
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "Only numbers are allowed",
+              },
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, "");
+              },
+            })}
             className={clsx(
               "border",
               errors.streetNumber ? "border-red-500" : "border-[#D0D5DD]",
@@ -129,9 +160,9 @@ const ContactInfo = () => {
         <HomeButton
           title="Place Order"
           bg="#4C0213"
-          type="submit"
+          onClick={() => handleSubmit(handlePayment)()}
           // onClick={() => removeFromCart(index)}
-          className="text-white text-[13px] md:text-[16px] font-geist font-bold rounded-full px-[17px] py-[6px] md:py-[8px] transition-all duration-300"
+          className="block md:hidden text-white mt-4 text-[13px] md:text-[16px] font-geist font-bold rounded-full px-[17px] py-[6px] md:py-[8px] transition-all duration-300"
         />
       </div>
     </form>

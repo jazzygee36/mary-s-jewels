@@ -66,16 +66,21 @@ const Header = () => {
 
   return (
     <header
-      className={`w-full px-4 md:px-10 py-4 fixed top-0 left-0 z-50 transition-all duration-300 ${getBackground()}`}>
+      className={`w-full px-4 md:px-10 py-4 fixed top-0 left-0 z-50 transition-all duration-300 ${getBackground()}`}
+    >
       <div className="hidden md:grid grid-cols-3 items-center">
         <nav className="flex items-center gap-6 justify-start">
           {leftNav.map((item, index) => (
-            <a
+            <Link
+              to={`/${item.path}`}
               key={index}
-              href={item.path}
-              className="text-sm md:text-base hover:opacity-70 transition">
+              // onClick={() => {
+              //   navigate(`/${item.path}`);
+              // }}
+              className="text-sm md:text-base hover:opacity-70 transition"
+            >
               {item.title}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -96,10 +101,11 @@ const Header = () => {
                   onClick={() =>
                     navigate(auth.isAuthenticated ? item.path : "/login")
                   }
-                  className="text-sm md:text-base hover:opacity-70 transition">
+                  className="text-sm md:text-base hover:opacity-70 transition"
+                >
                   {item.title}
-                  <span className="ml-2 text-sm font-bold text-white bg-red-500 px-2 rounded">
-                    {Array.isArray(cartItems) ? cartItems.length : 0}
+                  <span className=" text-sm font-medium text-white   rounded">
+                    ({Array.isArray(cartItems) ? cartItems.length : 0})
                   </span>
                 </button>
               );
@@ -109,7 +115,8 @@ const Header = () => {
               <button
                 key={index}
                 onClick={() => navigate(item.path)}
-                className="text-sm md:text-base hover:opacity-70 transition">
+                className="text-sm md:text-base hover:opacity-70 transition"
+              >
                 {item.title}
               </button>
             );
@@ -118,7 +125,8 @@ const Header = () => {
           {/* AUTH BUTTON */}
           <button
             onClick={handleAuthClick}
-            className="text-sm md:text-base hover:opacity-70 transition bg-[#4C0216] text-white px-4 py-2 rounded">
+            className="text-sm md:text-base hover:opacity-70 transition bg-[#4C0216] text-white px-4 py-2 rounded"
+          >
             {auth.isAuthenticated ? "Logout" : "Login"}
           </button>
         </nav>
@@ -126,7 +134,9 @@ const Header = () => {
 
       {/* Mobile Header */}
       <div className="flex md:hidden items-center justify-between">
-        <img src={Logo} alt="logo" className="w-[200px]" />
+        <Link to="/">
+          <img src={Logo} alt="logo" className="w-[200px]" />
+        </Link>
 
         <button onClick={() => setOpenMenu(!openMenu)}>
           {openMenu ? (
@@ -150,7 +160,8 @@ const Header = () => {
                   onClick={() =>
                     navigate(auth.isAuthenticated ? item.path : "/login")
                   }
-                  className="block font-semibold text-[18px] hover:opacity-70">
+                  className="block font-semibold text-[18px] hover:opacity-70"
+                >
                   {item.title}
                   <span className="ml-2 text-sm">
                     ({cartItems?.length ?? 0})
@@ -160,12 +171,16 @@ const Header = () => {
             }
 
             return (
-              <Link
+              <button
                 key={index}
-                to={item.path}
-                className="block font-semibold text-[18px] hover:opacity-70">
+                onClick={() => {
+                  navigate(`/${item.path}`);
+                  setOpenMenu(false);
+                }}
+                className="block font-semibold text-[18px] hover:opacity-70"
+              >
                 {item.title}
-              </Link>
+              </button>
             );
           })}
         </div>
