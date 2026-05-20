@@ -78,7 +78,7 @@ const Home = () => {
         <About />
       </div>
       <div id="products">
-        <Product />
+        <Product category={"trending"} />
       </div>
 
       <div id="collections">
