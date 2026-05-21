@@ -43,7 +43,6 @@ const OrderSummary = () => {
     queryKey: ["me"],
     queryFn: getUser,
   });
-
   const {
     register,
     handleSubmit,
@@ -51,7 +50,6 @@ const OrderSummary = () => {
   } = useForm<OrderFormData>({
     resolver: zodResolver(orderFormSchema),
   });
-
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info";
