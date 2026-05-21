@@ -8,6 +8,7 @@ import ProtectedRoute from "./auth/protected-route";
 import SignUp from "./pages/account/sign-up";
 import Login from "./pages/account/login";
 import ScrollToTop from "./components/ScrollToTop";
+import OrdersPage from "./pages/order-list";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
         <Route path="/product/:id" element={<ProductId />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/order-summary" element={<OrderSummary />} />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/my-orders" element={<OrdersPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

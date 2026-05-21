@@ -19,6 +19,7 @@ import { getUser } from "../../api/me";
 import GlobalError from "../../components/global-error";
 import Spinner from "../../components/spinner";
 import PaystackPop from "@paystack/inline-js";
+import { useNavigate } from "react-router-dom";
 // import PaystackPop from "@paystack/inline-js";
 
 interface User {
@@ -27,8 +28,12 @@ interface User {
 }
 
 const OrderSummary = () => {
-  // const navigate = useNavigate();
-  const { cartItems, decrementItem, incrementItem, subtotal } = useAppContext();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const { cartItems, decrementItem, incrementItem, subtotal, setCartItems } =
+    useAppContext();
+
   const {
     data: user,
     isLoading,
@@ -38,7 +43,7 @@ const OrderSummary = () => {
     queryKey: ["me"],
     queryFn: getUser,
   });
-  console.log("User data:", user);
+
   const {
     register,
     handleSubmit,
@@ -46,248 +51,173 @@ const OrderSummary = () => {
   } = useForm<OrderFormData>({
     resolver: zodResolver(orderFormSchema),
   });
+
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info";
   } | null>(null);
 
-  const verifyPayment = async (reference: string) => {
-    try {
-      const res = await fetch("http://localhost:5000/payments/verify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ reference }),
-      });
-
-      return await res.json();
-    } catch (error) {
-      console.log(error);
-      return null;
+  const handlePayment = (data: OrderFormData) => {
+    if (!user?._id || !user?.email) {
+      setToast({ message: "Please login first", type: "error" });
+      return;
     }
-  };
 
-  //   mutationFn: createOrder,
-  //   onSuccess: (data) => {
-  //     setToast({
-  //       message: data.message || "Order placed successfully",
-  //       type: "success",
-  //     });
-  //     localStorage.removeItem("cartItems");
-  //     setCartItems([]);
-  //     setTimeout(() => {
-  //       navigate("/");
-  //     }, 1500); // 1.5 seconds
+    if (!cartItems?.length) {
+      setToast({ message: "Cart is empty", type: "error" });
+      return;
+    }
 
-  //     console.log("Order creation response:", data);
-  //   },
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   onError: (error: any) => {
-  //     const message =
-  //       error?.response?.data?.message ||
-  //       error?.message ||
-  //       "Something went wrong ❌";
+    const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+    if (!PAYSTACK_KEY) {
+      setToast({ message: "Payment config missing", type: "error" });
+      return;
+    }
 
-  //     setToast({
-  //       message,
-  //       type: "error",
-  //     });
-  //   },
-  // });
+    const paystack = new PaystackPop();
 
-  // const paymentMutation = useMutation({
-  //   mutationFn: createPayment,
-  //   onSuccess: (data) => {
-  //     window.location.href = data?.data?.cashierUrl;
-  //   },
-  // });
+    paystack.newTransaction({
+      key: PAYSTACK_KEY,
+      email: user.email,
+      amount: subtotal * 100,
 
-  const handlePayment = async (data: OrderFormData) => {
-    if (!user?._id || !user?.email) return;
+      metadata: {
+        custom_fields: [
+          {
+            display_name: "User ID",
+            variable_name: "userId",
+            value: user._id,
+          },
+        ],
+      },
+      onSuccess: async (transaction) => {
+        try {
+          setLoading(true);
+          setToast({ message: "Processing order...", type: "info" });
 
-    try {
-      const paystack = new PaystackPop();
-      const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
-
-      if (!PAYSTACK_KEY) {
-        throw new Error("Missing Paystack public key");
-      }
-
-      paystack.newTransaction({
-        key: PAYSTACK_KEY,
-
-        email: user.email,
-
-        amount: subtotal * 100,
-
-        currency: "NGN",
-
-        metadata: {
-          custom_fields: [
+          const res = await fetch(
+            "https://mary-s-jewels-backend.vercel.app/users/verify-and-create",
             {
-              display_name: "Customer Name",
-              variable_name: "customer_name",
-              value: data.email,
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                reference: transaction.reference,
+                userId: user._id,
+                shipping: data,
+              }),
             },
-          ],
-          // cartItems,
-          // shipping: data,
-          // subtotal,
-        },
-        onSuccess: async (transaction: { reference: string }) => {
-          console.log(transaction);
+          );
 
-          const result = await verifyPayment(transaction.reference);
+          const result = await res.json();
 
-          const isSuccess =
-            result?.status === true ||
-            result?.data?.status === "success" ||
-            result?.success === true;
-          if (isSuccess) {
-            setToast({
-              message: "Payment verified 🎉",
-              type: "success",
-            });
-          } else {
-            setToast({
-              message: "Payment verification failed",
-              type: "error",
-            });
+          if (!res.ok || !result?.order) {
+            throw new Error("Order creation failed");
           }
-        },
 
-        onCancel: () => {
+          // clear BOTH storage + state
+          localStorage.removeItem("cartItems");
+          setCartItems([]);
+
           setToast({
-            message: "Payment cancelled",
-            type: "info",
+            message: "Order placed successfully 🎉",
+            type: "success",
           });
-        },
-      });
-    } catch (error) {
-      console.log(error);
 
-      setToast({
-        message: "Something went wrong",
-        type: "error",
-      });
-    }
+          navigate("/my-orders");
+        } catch (err) {
+          setToast({
+            message: "Payment succeeded but order failed",
+            type: "error",
+          });
+        } finally {
+          setLoading(false);
+        }
+      },
+
+      onCancel: () => {
+        setToast({ message: "Payment cancelled", type: "info" });
+      },
+    });
   };
 
-  if (isLoading)
-    return (
-      <div>
-        <Spinner />
-      </div>
-    );
-  if (isError)
-    return (
-      <div>
-        <GlobalError onRetry={refetch} />
-      </div>
-    );
+  if (isLoading) return <Spinner />;
+  if (isError) return <GlobalError onRetry={refetch} />;
+
   return (
     <div>
       <Header />
+
       <div className="grid grid-cols-1 md:grid-cols-2 mt-[110px] gap-4 mx-auto w-[95%] md:w-[90%]">
         <div className="border-none md:border border-[#E4E7EC] p-4 md:p-[25px] rounded-[11.67px] flex flex-col gap-2 ">
-          <div className="  flex gap-2 items-center">
-            <p className="text-[14px] md:text-[20px] text-[#101928] font-vastago font-semibold">
+          <div className="flex gap-2 items-center">
+            <p className="text-[14px] md:text-[20px] font-semibold">
               Order Summary
             </p>
-            <div className="w-[23.43px] h-[24.65px] rounded-full bg-[#AC0453] text-white flex items-center justify-center text-white text-[11px] font-bold">
-              {cartItems?.length}
+
+            <div className="w-[23px] h-[23px] rounded-full bg-[#AC0453] text-white flex items-center justify-center text-[11px] font-bold">
+              {cartItems?.length || 0}
             </div>
           </div>
+
           <div className="flex flex-col gap-4 mt-8">
-            {cartItems.length > 0 &&
-              cartItems.map((item, index) => (
-                <div key={index}>
-                  <div className="flex justify-between w-full rounded-2xl mb-10">
-                    <div className="flex gap-2 md:gap-8">
-                      <img
-                        src={item?.image}
-                        alt={item?.productName}
-                        className="bg-[#E5E5E5] rounded-2xl w-[100px] md:w-[150px] h-[100px] md:h-[150px] object-cover p-0"
-                      />
+            {cartItems?.length > 0 ? (
+              (cartItems ?? []).map((item, index) => (
+                <div key={index} className="flex justify-between mb-10">
+                  <div className="flex gap-4">
+                    <img
+                      src={item?.image}
+                      className="w-[100px] h-[100px] object-cover rounded-2xl"
+                    />
 
-                      <div className="flex flex-col w-full justify-between">
-                        <div>
-                          <h3 className="text-[#303030] text-[14px] md:text-[18px] font-semibold font-geist truncate w-[150px] md:w-[180px]  ">
-                            {item?.productName}
-                          </h3>
+                    <div>
+                      <h3 className="font-semibold">{item?.productName}</h3>
 
-                          <p className="text-[#767676] text-[10px] md:text-[13px] font-geist truncate w-[150px] md:w-[200px]  ">
-                            {item?.description}
-                          </p>
-                        </div>
+                      <p className="text-sm text-gray-500">
+                        {item?.description}
+                      </p>
 
-                        <div className="bg-[#F5F5F5] w-[80%] md:w-full rounded-[12px] py-1 px-6 flex items-center justify-center gap-4">
-                          <button
-                            type="button"
-                            onClick={() => decrementItem(index)}
-                            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
-                          >
-                            <SubtractionIcon />
-                          </button>
+                      <div className="flex gap-3 mt-2">
+                        <button onClick={() => decrementItem(index)}>
+                          <SubtractionIcon />
+                        </button>
 
-                          <span className="text-[20px] font-bold text-[#303030] font-geist mx-2">
-                            {item?.quantity || 1}
-                          </span>
+                        <span>{item?.quantity || 1}</span>
 
-                          <button
-                            type="button"
-                            onClick={() => incrementItem(index)}
-                            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
-                          >
-                            <AdditionIcon />
-                          </button>
-                        </div>
+                        <button onClick={() => incrementItem(index)}>
+                          <AdditionIcon />
+                        </button>
                       </div>
                     </div>
-
-                    <div className="flex flex-col ">
-                      <p className="text-[#303030] text-[18px] font-semibold font-geist">
-                        ₦
-                        {(
-                          (item?.amount ?? 0) * (item?.quantity || 1)
-                        ).toLocaleString()}
-                      </p>
-                    </div>
                   </div>
-                </div>
-              ))}
-            <div className="flex flex-col gap-4">
-              <div className="border-t border-[#767676]/35 py-4 flex items-center justify-between">
-                <p className="text-[#303030] text-[16px] font-normal font-geist">
-                  Subtotal
-                </p>
-                <span className="text-[#303030] text-[18px] font-semibold font-geist">
-                  ₦{subtotal?.toLocaleString()}
-                </span>
-              </div>
 
-              <div className="border-t border-[#767676]/35 py-4 flex items-center justify-between">
-                <p className="text-[#303030] text-[16px] font-normal font-geist">
-                  Shipping
-                </p>
-                <span className="text-[#303030] text-[14px] md:text-[18px] font-semibold font-geist">
-                  Enter shipping <br className="block md:hidden" /> details
-                  first
-                </span>
-              </div>
+                  <p className="font-semibold">
+                    ₦
+                    {(
+                      (item?.amount ?? 0) * (item?.quantity || 1)
+                    ).toLocaleString()}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No items in cart</p>
+            )}
+
+            <div className="border-t pt-4 flex justify-between">
+              <p>Subtotal</p>
+              <p>₦{subtotal?.toLocaleString()}</p>
             </div>
-            <HomeButton
-              title="Place Order"
-              bg="#4C0213"
-              onClick={() => handleSubmit(handlePayment)()}
-              // onClick={() => removeFromCart(index)}
-              className="hidden md:block text-white text-[13px] md:text-[16px] font-geist font-bold rounded-full px-[17px] py-[6px] md:py-[8px] transition-all duration-300"
-            />
           </div>
+
+          <HomeButton
+            title={loading ? "Processing..." : "Place Order"}
+            bg="#4C0213"
+            disabled={loading || !cartItems?.length}
+            onClick={handleSubmit(handlePayment)}
+            className="hidden md:block text-white font-bold rounded-full"
+          />
         </div>
 
-        <div className="border-none md:border border-[#E4E7EC] p-4 md:p-[25px] rounded-[11.67px]">
+        <div className="border p-4 rounded-xl">
           <ContactInfo
             register={register}
             handleSubmit={handleSubmit}
@@ -296,12 +226,14 @@ const OrderSummary = () => {
           />
         </div>
       </div>
+
       <Follow />
       <Footer />
+
       {toast && (
         <Toast
-          message={toast?.message}
-          type={toast?.type}
+          message={toast.message}
+          type={toast.type}
           onClose={() => setToast(null)}
         />
       )}
