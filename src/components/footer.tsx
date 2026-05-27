@@ -37,9 +37,17 @@ const Footer = () => {
 
       <hr />
       <div className="flex items-center justify-between mt-[28px] text-[#736965] font-geist text-[11px] md:text-[16px] ">
-        <p>Privacy Policy</p>
+        <p
+          onClick={() => navigate("/privacy-policy")}
+          className="cursor-pointer"
+        >
+          Privacy Policy
+        </p>
         <p>©Mary’s Jewels & Watches 2026</p>
-        <p onClick={() => navigate("/terms-&-conditions")}>
+        <p
+          onClick={() => navigate("/terms-&-conditions")}
+          className="cursor-pointer"
+        >
           Terms & Conditions
         </p>
       </div>
