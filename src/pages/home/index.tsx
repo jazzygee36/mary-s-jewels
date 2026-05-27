@@ -8,11 +8,12 @@ import Testomonies from "./testimony";
 import Follow from "../../components/follow";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const Home = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (location.hash) {
@@ -49,11 +50,13 @@ const Home = () => {
               </p>
               <div className="flex flex-col md:flex-row items-center gap-4 mt-[20px] md:mt-[55px] w-full md:w-auto">
                 <HomeButton
+                  onClick={() => navigate("/all-collections")}
                   title={"Shop Now"}
                   bg={"#4C0213"}
                   className="py-[14px] px-[40px] text-white text-[17px] rounded-full font-semibold text-[15px] md:text-[17.5px] w-full md:w-auto"
                 />
                 <HomeButton
+                  onClick={() => navigate("/all-collections")}
                   title={"See all Collections"}
                   bg={""}
                   className="bg-[#FFAA92] md:bg-transparent py-[14px] px-[40px] text-[17px] text-[#4C0213] md:text-white border border-white rounded-full font-semibold text-[15px] md:text-[17.5px] w-full md:w-auto"

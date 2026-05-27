@@ -24,16 +24,16 @@ const Cart = () => {
 
                   <div className="flex flex-col w-full justify-between">
                     <div>
-                      <h3 className="text-[#303030] text-[14px] md:text-[18px] font-semibold font-geist truncate w-[170px] md:w-[180px]  ">
+                      <h3 className="text-[#303030] capitalize text-[14px] md:text-[18px] font-semibold font-geist truncate w-[100px] md:w-[180px]  ">
                         {item?.productName}
                       </h3>
 
-                      <p className="text-[#767676] text-[13px] md:text-[16px] font-geist truncate w-[170px] md:w-[200px]  ">
+                      <p className="text-[#767676] text-[13px] md:text-[16px] font-geist truncate w-[120px] md:w-[200px]  ">
                         {item?.description}
                       </p>
                     </div>
 
-                    <div className="bg-[#F5F5F5] w-[80%] md:w-full rounded-[12px] py-1 px-6 flex items-center justify-center gap-4">
+                    <div className="bg-[#F5F5F5] w-[80%] md:w-full rounded-[12px] py-1 px-3 md:px-6 flex items-center justify-center gap-2 md:gap-4">
                       <button
                         type="button"
                         onClick={() => decrementItem(index)}

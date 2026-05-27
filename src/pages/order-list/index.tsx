@@ -25,6 +25,8 @@ const OrdersPage = () => {
     enabled: !!user?._id,
   });
 
+  console.log("Orders Data:", orders);
+
   if (isLoading || ordersLoading) return <Spinner />;
 
   if (isLoading) return <Spinner />;

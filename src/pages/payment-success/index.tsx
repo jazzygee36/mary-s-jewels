@@ -83,7 +83,7 @@ const PaymentSuccess = () => {
                 order is currently being prepared for shipping.
               </p>
               <button
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/all-collections")}
                 className="mt-8 bg-[#4C0213] text-white px-6 py-3 rounded-full font-bold w-full shadow-md hover:opacity-90 transition-opacity"
               >
                 Continue Shopping

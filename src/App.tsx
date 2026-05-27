@@ -9,6 +9,7 @@ import Login from "./pages/account/login";
 import ScrollToTop from "./components/ScrollToTop";
 import OrdersPage from "./pages/order-list";
 import PaymentSuccess from "./pages/payment-success";
+import TermsAndConditions from "./pages/terms-and-condition";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<SignUp />} />
+        <Route path="/terms-&-conditions" element={<TermsAndConditions />} />
         <Route path="/all-collections" element={<AllCollection />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductId />} />

@@ -142,7 +142,7 @@ const OrderSummary = () => {
       <Header />
 
       <div className="grid grid-cols-1 md:grid-cols-2 mt-[110px] gap-4 mx-auto w-[95%] md:w-[90%]">
-        <div className="border-none md:border border-[#E4E7EC] p-4 md:p-[25px] rounded-[11.67px] flex flex-col gap-2 ">
+        <div className="border border-[#E4E7EC] rounded-[11.67px] p-4 md:p-[25px] shadow flex flex-col gap-2 ">
           <div className="flex gap-2 items-center">
             <p className="text-[14px] md:text-[20px] font-semibold">
               Order Summary
@@ -160,17 +160,24 @@ const OrderSummary = () => {
                   <div className="flex gap-4">
                     <img
                       src={item?.image}
+                      // onClick={() => {
+                      //   if (!item?._id) return;
+                      //   window.location.href = `/product/${item._id.toLowerCase().replace(/\s+/g, "-")}`;
+                      // }}
+                      alt={item?.productName}
                       className="w-[100px] h-[100px] object-cover rounded-2xl"
                     />
 
                     <div>
-                      <h3 className="font-semibold">{item?.productName}</h3>
+                      <h3 className="font-semibold capitalize truncate w-[150px] md:w-[200px] text-[14px] md:text-[18px]">
+                        {item?.productName}
+                      </h3>
 
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 truncate w-[150px] md:w-[270px]">
                         {item?.description}
                       </p>
 
-                      <div className="flex gap-3 mt-2">
+                      <div className="flex gap-8 font-semibold item-center mt-6 bg-[#F5F5F5] w-[100%] md:w-[50%] rounded-[12px] py-[10px] px-1 items-center justify-center">
                         <button onClick={() => decrementItem(index)}>
                           <SubtractionIcon />
                         </button>
@@ -207,11 +214,11 @@ const OrderSummary = () => {
             bg="#4C0213"
             disabled={loading || !cartItems?.length}
             onClick={handleSubmit(handlePayment)}
-            className="hidden md:block text-white font-bold rounded-full"
+            className="hidden md:block text-white font-bold rounded-full py-3 mt-4 transition-all duration-300"
           />
         </div>
 
-        <div className="border p-4 rounded-xl">
+        <div className="border border-[#E4E7EC] rounded-[11.67px] p-4 md:p-[25px] shadow  rounded-xl">
           <ContactInfo
             register={register}
             handleSubmit={handleSubmit}
