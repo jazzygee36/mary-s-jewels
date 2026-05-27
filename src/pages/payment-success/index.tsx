@@ -35,7 +35,6 @@ const PaymentSuccess = () => {
         const result = await res.json();
         console.log("Verification Server Response:", result);
 
-        // Payment verified and backend successfully updated the database document status!
         setStatus("success");
         setCartItems([]); // Wipe frontend cart state clear
         localStorage.removeItem("payment_reference"); // Clear any cached reference strings
