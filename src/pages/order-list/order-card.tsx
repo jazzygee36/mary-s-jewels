@@ -9,13 +9,14 @@ const OrderCard = ({ order }: OrderCardProps) => {
           <p className="text-sm text-[#7A7A7A]">ORDER ID</p>
 
           <h2 className="text-xl font-bold text-[#222]">#{order?.orderId}</h2>
+          <p>{order?.createdAt?.slice(0, 10)}</p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
 
-          <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
-            Payment Successful
+          <span className="bg-green-100 capitalize text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+            {order?.paymentStatus}
           </span>
         </div>
       </div>
@@ -61,13 +62,13 @@ const OrderCard = ({ order }: OrderCardProps) => {
           <p className="text-sm text-[#7A7A7A]">Total Paid</p>
 
           <h2 className="text-2xl font-bold text-[#222]">
-            ₦{Number(order?.total ?? 0).toLocaleString()}
+            ₦{Number(order?.amount ?? 0).toLocaleString()}
           </h2>
         </div>
 
-        <button className="bg-[#4C0213] hover:bg-[#35010d] transition-all text-white px-6 py-3 rounded-full">
+        {/* <button className="bg-[#4C0213] hover:bg-[#35010d] transition-all text-white px-6 py-3 rounded-full">
           View Details
-        </button>
+        </button> */}
       </div>
     </div>
   );

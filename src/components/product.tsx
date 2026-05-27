@@ -53,9 +53,9 @@ const Product = ({ seeAll = true, className }: ProductProps) => {
 
   if (isLoading)
     return (
-      <p>
+      <div>
         <Spinner />
-      </p>
+      </div>
     );
 
   if (isError)

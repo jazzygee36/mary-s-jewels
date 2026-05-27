@@ -16,7 +16,7 @@ const HomeInput = forwardRef<HTMLInputElement, HomeInputProps>(
       <div className="w-full">
         {/* Label */}
         {label && (
-          <label className="text-[14px] font-geist text-[#303030]">
+          <label className="text-[14px] font-geist text-[#303030] font-semibold">
             {label}
           </label>
         )}

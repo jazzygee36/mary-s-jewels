@@ -22,8 +22,8 @@ const leftNav: NavItem[] = [
 
 const rightNav: NavItem[] = [
   // { title: "Login", path: "/login" },
-  // { title: "Search", path: "/" },
-  { title: "Bag", path: "/order-summary" },
+  { title: "Cart", path: "/order-summary" },
+  { title: "My Orders", path: "/my-orders" },
 ];
 
 const Header = () => {
@@ -90,18 +90,18 @@ const Header = () => {
           </Link>
         </div>
 
-        <nav className="flex items-center gap-6 justify-end">
+        <nav className="flex items-center gap-6 justify-end cursor-pointer bg-[#4C0216]">
           {rightNav.map((item, index) => {
-            const isBag = item.title === "Bag";
+            const isCart = item.title === "Cart";
 
-            if (isBag) {
+            if (isCart) {
               return (
                 <button
                   key={index}
                   onClick={() =>
                     navigate(auth.isAuthenticated ? item.path : "/login")
                   }
-                  className="text-sm md:text-base hover:opacity-70 transition"
+                  className="text-sm md:text-base hover:opacity-70 transition cursor-pointer bg-[#4C0216] text-white px-4 py-2 rounded"
                 >
                   {item.title}
                   <span className=" text-sm font-medium text-white   rounded">
@@ -160,7 +160,7 @@ const Header = () => {
                   onClick={() =>
                     navigate(auth.isAuthenticated ? item.path : "/login")
                   }
-                  className="block font-semibold text-[18px] hover:opacity-70"
+                  className="block font-semibold text-[18px] hover:opacity-70 cursor-pointer bg-[#4C0216]"
                 >
                   {item.title}
                   <span className="ml-2 text-sm">

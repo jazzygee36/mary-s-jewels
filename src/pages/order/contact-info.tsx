@@ -91,8 +91,8 @@ const ContactInfo = ({
           />
           <HomeInput
             type={"text"}
-            label="Shipping Number"
-            placeholder="Enter your shipping number "
+            label="Delivery number"
+            placeholder="Enter delivery number "
             {...register("shippingNumber")}
             className={clsx(
               "border",
