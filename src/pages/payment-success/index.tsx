@@ -13,7 +13,6 @@ const PaymentSuccess = () => {
     "verifying",
   );
 
-  // Ref prevents React 18 StrictMode from firing double parallel fetch requests in local dev
   const verificationStarted = useRef(false);
   const reference = searchParams.get("reference");
 
