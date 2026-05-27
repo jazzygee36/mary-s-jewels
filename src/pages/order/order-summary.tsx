@@ -10,17 +10,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { orderFormSchema, type OrderFormData } from "../../utils/validation";
 import { useQuery } from "@tanstack/react-query";
-// import { createOrder } from "../../api/create-order";
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import Toast from "../../components/toast";
 import { getUser } from "../../api/me";
-// import { createPayment } from "../../api/create-payment";
 import GlobalError from "../../components/global-error";
 import Spinner from "../../components/spinner";
-import PaystackPop from "@paystack/inline-js";
-import { useNavigate } from "react-router-dom";
-// import PaystackPop from "@paystack/inline-js";
 
 interface User {
   _id: string;
@@ -28,11 +22,9 @@ interface User {
 }
 
 const OrderSummary = () => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const { cartItems, decrementItem, incrementItem, subtotal, setCartItems } =
-    useAppContext();
+  const { cartItems, decrementItem, incrementItem, subtotal } = useAppContext();
 
   const {
     data: user,
@@ -55,89 +47,98 @@ const OrderSummary = () => {
     type: "success" | "error" | "info";
   } | null>(null);
 
-  const handlePayment = (data: OrderFormData) => {
+  // const { mutateAsync: verifyOrderMutation } = useMutation({
+  //   mutationFn: verifyAndCreate,
+  //   onSuccess: (data) => {
+  //     setToast({
+  //       message: data.message || "Order placed successfully 🎉",
+  //       type: "success",
+  //     });
+  //   },
+  //   onError: (error: any) => {
+  //     const message =
+  //       error?.response?.data?.message ||
+  //       error?.message ||
+  //       "Something went wrong ❌";
+
+  //     setToast({ message, type: "error" });
+  //   },
+  // });
+
+  const handlePayment = async (data: OrderFormData) => {
+    console.log("Form Data:", data);
+
     if (!user?._id || !user?.email) {
-      setToast({ message: "Please login first", type: "error" });
+      setToast({
+        message: "Please login first",
+        type: "error",
+      });
       return;
     }
 
     if (!cartItems?.length) {
-      setToast({ message: "Cart is empty", type: "error" });
+      setToast({
+        message: "Cart is empty",
+        type: "error",
+      });
       return;
     }
 
-    const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
-    if (!PAYSTACK_KEY) {
-      setToast({ message: "Payment config missing", type: "error" });
-      return;
-    }
+    try {
+      setLoading(true);
 
-    const paystack = new PaystackPop();
+      const payload = {
+        customer: user._id,
+        amount: subtotal,
 
-    paystack.newTransaction({
-      key: PAYSTACK_KEY,
-      email: user.email,
-      amount: subtotal * 100,
+        items: cartItems.map((item) => ({
+          product: item._id,
+          quantity: item.quantity,
+        })),
 
-      metadata: {
-        custom_fields: [
-          {
-            display_name: "User ID",
-            variable_name: "userId",
-            value: user._id,
+        shipping: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          streetNumber: data.streetNumber,
+          state: data.state,
+          city: data.city,
+          address: data.address,
+        },
+      };
+
+      console.log("PAYLOAD:", payload);
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/payments/initialize`, // Corrected URL string
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        ],
-      },
-      onSuccess: async (transaction) => {
-        try {
-          setLoading(true);
-          setToast({ message: "Processing order...", type: "info" });
+          body: JSON.stringify(payload),
+        },
+      );
 
-          const res = await fetch(
-            "https://mary-s-jewels-backend.vercel.app/users/verify-and-create",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                reference: transaction.reference,
-                userId: user._id,
-                shipping: data,
-              }),
-            },
-          );
+      if (!res.ok) {
+        throw new Error("Payment initialization failed");
+      }
 
-          const result = await res.json();
+      const result = await res.json();
 
-          if (!res.ok || !result?.order) {
-            throw new Error("Order creation failed");
-          }
+      localStorage.setItem("payment_reference", result.reference);
 
-          // clear BOTH storage + state
-          localStorage.removeItem("cartItems");
-          setCartItems([]);
-
-          setToast({
-            message: "Order placed successfully 🎉",
-            type: "success",
-          });
-
-          navigate("/my-orders");
-        } catch (err) {
-          setToast({
-            message: "Payment succeeded but order failed",
-            type: "error",
-          });
-        } finally {
-          setLoading(false);
-        }
-      },
-
-      onCancel: () => {
-        setToast({ message: "Payment cancelled", type: "info" });
-      },
-    });
+      window.location.href = result.authorization_url;
+    } catch (error: any) {
+      setToast({
+        message: error?.message || "Something went wrong initializing payment",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
-
   if (isLoading) return <Spinner />;
   if (isError) return <GlobalError onRetry={refetch} />;
 
