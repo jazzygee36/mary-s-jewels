@@ -161,7 +161,6 @@ const ContactInfo = ({
           title="Place Order"
           bg="#4C0213"
           onClick={() => handleSubmit(handlePayment)()}
-          // onClick={() => removeFromCart(index)}
           className="block md:hidden text-white mt-4 text-[13px] md:text-[16px] font-geist font-bold rounded-full px-[17px] py-[6px] md:py-[8px] transition-all duration-300"
         />
       </div>
