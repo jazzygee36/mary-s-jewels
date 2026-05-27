@@ -47,7 +47,6 @@ const OrderSummary = () => {
     type: "success" | "error" | "info";
   } | null>(null);
 
-  // const { mutateAsync: verifyOrderMutation } = useMutation({
   //   mutationFn: verifyAndCreate,
   //   onSuccess: (data) => {
   //     setToast({

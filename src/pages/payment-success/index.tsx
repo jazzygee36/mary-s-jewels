@@ -31,6 +31,7 @@ const PaymentSuccess = () => {
         }
 
         const result = await res.json();
+        console.log("Verification Server Response:", result);
 
         setStatus("success");
         setCartItems([]);
