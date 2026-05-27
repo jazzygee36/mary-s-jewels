@@ -15,6 +15,7 @@ import Toast from "../../components/toast";
 import { getUser } from "../../api/me";
 import GlobalError from "../../components/global-error";
 import Spinner from "../../components/spinner";
+import PaystackLogo from "../../assets/svg-img/paystack.svg";
 
 interface User {
   _id: string;
@@ -203,7 +204,7 @@ const OrderSummary = () => {
               <p>No items in cart</p>
             )}
 
-            <div className="border-t pt-4 flex justify-between">
+            <div className="border-t pt-4 flex justify-between font-bold">
               <p>Subtotal</p>
               <p>₦{subtotal?.toLocaleString()}</p>
             </div>
@@ -214,8 +215,18 @@ const OrderSummary = () => {
             bg="#4C0213"
             disabled={loading || !cartItems?.length}
             onClick={handleSubmit(handlePayment)}
-            className="hidden md:block text-white font-bold rounded-full py-3 mt-4 transition-all duration-300"
+            className="hidden md:block text-white font-semibold font-vastago rounded-full py-3 mt-4 transition-all duration-300"
           />
+
+          <h1 className="text-xl md:text-[20px] font-bold my-4">Payment</h1>
+          <div className="">
+            <img src={PaystackLogo} alt="paystack" className="w-[120px] mb-3" />
+            <span className="text-sm text-gist mt-4 font-medium ">
+              PAYSTACK - Bank Transfer, Ussd, Debit /Credit Cards Please pay the
+              exact fees when using the Bank Transfer option. Do not pay less or
+              more to avoid dispense errors. 
+            </span>
+          </div>
         </div>
 
         <div className="border border-[#E4E7EC] rounded-[11.67px] p-4 md:p-[25px] shadow  rounded-xl">
