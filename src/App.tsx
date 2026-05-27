@@ -10,6 +10,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import OrdersPage from "./pages/order-list";
 import PaymentSuccess from "./pages/payment-success";
 import TermsAndConditions from "./pages/terms-and-condition";
+import PrivacyPolicy from "./pages/policy-privacy";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/terms-&-conditions" element={<TermsAndConditions />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/all-collections" element={<AllCollection />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductId />} />
