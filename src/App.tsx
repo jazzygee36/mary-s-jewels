@@ -3,7 +3,6 @@ import Home from "./pages/home";
 import AllCollection from "./pages/all-collections";
 import ProductId from "./pages/product-id";
 import OrderSummary from "./pages/order/order-summary";
-
 import ProtectedRoute from "./auth/protected-route";
 import SignUp from "./pages/account/sign-up";
 import Login from "./pages/account/login";
