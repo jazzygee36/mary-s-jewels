@@ -8,7 +8,7 @@ import Footer from "../../components/footer";
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { setCartItems } = useAppContext(); // Get the clear cart function from your app context
+  const { setCartItems } = useAppContext();
   const [status, setStatus] = useState<"verifying" | "success" | "error">(
     "verifying",
   );
@@ -31,7 +31,6 @@ const PaymentSuccess = () => {
         }
 
         const result = await res.json();
-        console.log("Verification Server Response:", result);
 
         setStatus("success");
         setCartItems([]);

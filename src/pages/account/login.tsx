@@ -3,14 +3,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-
 import HomeButton from "../../components/button";
 import Follow from "../../components/follow";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import HomeInput from "../../components/input";
 import BackArrow from "../../assets/icons/back-arrow";
-
 import { UserLogin } from "../../api/login";
 import { loginFormSchema, type LoginFormData } from "../../utils/validation";
 import Toast from "../../components/toast";
@@ -80,7 +78,8 @@ const Login = () => {
 
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mt-5 flex flex-col space-y-3">
+              className="mt-5 flex flex-col space-y-3"
+            >
               {/* EMAIL */}
               <HomeInput
                 type="text"
@@ -117,7 +116,10 @@ const Login = () => {
               Lost your password?{" "}
               <span className="font-semibold  hover:underline">Recover</span>
             </div>
-            <div className="text-sm text-center my-3 cursor-pointer" onClick={() => navigate('/register')}>
+            <div
+              className="text-sm text-center my-3 cursor-pointer"
+              onClick={() => navigate("/register")}
+            >
               Don't have an account?{" "}
               <span className="font-semibold hover:underline">Signup</span>
             </div>
