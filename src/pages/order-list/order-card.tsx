@@ -2,6 +2,7 @@ interface OrderCardProps {
   order: any;
 }
 const OrderCard = ({ order }: OrderCardProps) => {
+  console.log("order", order);
   return (
     <div className="bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg rounded-[30px] p-6 hover:scale-[1.01] transition-all duration-300">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -13,9 +14,13 @@ const OrderCard = ({ order }: OrderCardProps) => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+          <div
+            className={`w-3 h-3 rounded-full ${order?.paymentStatus === "paid" ? "bg-green-700" : "bg-orange-700"} animate-pulse`}
+          />
 
-          <span className="bg-green-100 capitalize text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+          <span
+            className={`${order?.paymentStatus === "paid" ? "text-green-700 font-bold" : "text-orange-700 font-bold"}  capitalize  ${order?.paymentStatus === "paid" ? "bg-green-100" : "bg-orange-100"}  px-4 py-2 rounded-full text-sm font-semibold`}
+          >
             {order?.paymentStatus}
           </span>
         </div>
