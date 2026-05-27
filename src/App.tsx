@@ -16,7 +16,6 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        {/* <Route path="/" element={<Navigate to="/" replace />} /> */}
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/all-collections" element={<AllCollection />} />
