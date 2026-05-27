@@ -8,7 +8,7 @@ import Footer from "../../components/footer";
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { setCartItems } = useAppContext(); // Get the clear cart function from your app context
+  const { setCartItems } = useAppContext();
   const [status, setStatus] = useState<"verifying" | "success" | "error">(
     "verifying",
   );
@@ -17,7 +17,6 @@ const PaymentSuccess = () => {
   const reference = searchParams.get("reference");
 
   useEffect(() => {
-    // If there's no reference or we already started the request, step out
     if (!reference || verificationStarted.current) return;
 
     verificationStarted.current = true;
@@ -35,8 +34,8 @@ const PaymentSuccess = () => {
         console.log("Verification Server Response:", result);
 
         setStatus("success");
-        setCartItems([]); // Wipe frontend cart state clear
-        localStorage.removeItem("payment_reference"); // Clear any cached reference strings
+        setCartItems([]);
+        localStorage.removeItem("payment_reference");
       } catch (error) {
         console.error("Verification Client Error:", error);
         setStatus("error");

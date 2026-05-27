@@ -2,7 +2,6 @@ interface OrderCardProps {
   order: any;
 }
 const OrderCard = ({ order }: OrderCardProps) => {
-  console.log("OrderCard received order:", order); // Debugging log
   return (
     <div className="bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg rounded-[30px] p-6 hover:scale-[1.01] transition-all duration-300">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

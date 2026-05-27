@@ -47,7 +47,6 @@ const OrderSummary = () => {
     type: "success" | "error" | "info";
   } | null>(null);
 
-  // const { mutateAsync: verifyOrderMutation } = useMutation({
   //   mutationFn: verifyAndCreate,
   //   onSuccess: (data) => {
   //     setToast({
@@ -66,8 +65,6 @@ const OrderSummary = () => {
   // });
 
   const handlePayment = async (data: OrderFormData) => {
-    console.log("Form Data:", data);
-
     if (!user?._id || !user?.email) {
       setToast({
         message: "Please login first",
@@ -107,8 +104,6 @@ const OrderSummary = () => {
           address: data.address,
         },
       };
-
-      console.log("PAYLOAD:", payload);
 
       const res = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/payments/initialize`, // Corrected URL string
