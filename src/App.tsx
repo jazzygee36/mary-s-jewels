@@ -9,6 +9,7 @@ import SignUp from "./pages/account/sign-up";
 import Login from "./pages/account/login";
 import ScrollToTop from "./components/ScrollToTop";
 import OrdersPage from "./pages/order-list";
+import PaymentSuccess from "./pages/payment-success";
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/my-orders" element={<OrdersPage />} />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/payment-success" element={<PaymentSuccess />} />
         </Route>
       </Routes>
     </BrowserRouter>
