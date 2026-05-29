@@ -16,10 +16,15 @@ import {
 import Toast from "../../components/toast";
 
 import { confirmPassword } from "../../api/reset-password";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
+
+  // 1. FIXED: useSearchParams returns an array, destructure the first item
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token") || "";
+
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info";
@@ -31,18 +36,25 @@ const ResetPassword = () => {
     formState: { errors },
   } = useForm<ResetPwdFormData>({
     resolver: zodResolver(resetPwdFormData),
+
+    defaultValues: {
+      token: token,
+      newPassword: "",
+      confirmPassword: "",
+    },
   });
 
   const mutation = useMutation({
     mutationFn: confirmPassword,
     onSuccess: (data) => {
       setToast({
-        message: data.message,
+        message: data?.message || "Password updated successfully! 🎉",
         type: "success",
       });
-      navigate("/login");
+
+      setTimeout(() => navigate("/login"), 2000);
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     onError: (error: any) => {
       const message =
         error?.response?.data?.message ||
@@ -57,7 +69,9 @@ const ResetPassword = () => {
   });
 
   const onSubmit = (data: ResetPwdFormData) => {
-    mutation.mutate(data);
+    const { confirmPassword, ...apiPayload } = data;
+
+    mutation.mutate(apiPayload);
   };
 
   return (
@@ -67,11 +81,14 @@ const ResetPassword = () => {
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <div className="p-6 md:p-10 bg-white shadow-md rounded-lg">
-            <div className="my-14 flex items-center gap-4">
+            <button
+              onClick={() => navigate(-1)}
+              className="my-14 flex items-center gap-4 hover:opacity-70 transition-opacity"
+            >
               <BackArrow /> <span className="font-medium">Back</span>
-            </div>
+            </button>
 
-            <h2 className="text-[18px] md:text-[18px] font-semibold mt-5 text-[#111111]">
+            <h2 className="text-[18px] font-semibold mt-5 text-[#111111]">
               Reset Your Password
             </h2>
 
@@ -79,17 +96,20 @@ const ResetPassword = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="mt-8 flex flex-col space-y-3"
             >
+              <input type="hidden" {...register("token")} />
+
               <HomeInput
                 type="password"
                 label="New Password"
                 placeholder="New Password"
-                {...register("password")}
+                {...register("newPassword")}
               />
-              {errors.password && (
+              {errors.newPassword && (
                 <p className="text-red-500 text-xs">
-                  {errors.password.message}
+                  {errors.newPassword.message}
                 </p>
               )}
+
               <HomeInput
                 type="password"
                 label="Confirm Password"
@@ -108,6 +128,7 @@ const ResetPassword = () => {
                 title={mutation.isPending ? "Loading..." : "Update Password"}
                 bg="#4C0213"
                 className="text-white rounded-full py-3 mt-4"
+                disabled={mutation.isPending}
               />
             </form>
           </div>
