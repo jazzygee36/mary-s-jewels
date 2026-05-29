@@ -22,6 +22,7 @@ function App() {
         <Route path="/register" element={<SignUp />} />
         <Route path="/terms-&-conditions" element={<TermsAndConditions />} />
         <Route path="/recover-password" element={<ForgetPassword />} />
+        <Route path="/reset-password" element={<ForgetPassword />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/all-collections" element={<AllCollection />} />
         <Route path="/login" element={<Login />} />
