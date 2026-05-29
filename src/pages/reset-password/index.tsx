@@ -70,7 +70,6 @@ const ResetPassword = () => {
 
   const onSubmit = (data: ResetPwdFormData) => {
     const { confirmPassword, ...apiPayload } = data;
-
     mutation.mutate(apiPayload);
   };
 
