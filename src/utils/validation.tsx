@@ -42,6 +42,16 @@ export const loginFormSchema = z.object({
 
 export type LoginFormData = z.infer<typeof loginFormSchema>;
 
+export const recoveryFormSchema = z.object({
+  email: z
+    .string()
+    .email("Please enter a valid email address")
+    .toLowerCase()
+    .trim(),
+});
+
+export type RecoveryFormSchema = z.infer<typeof recoveryFormSchema>;
+
 export const orderFormSchema = z.object({
   email: z
     .string()
