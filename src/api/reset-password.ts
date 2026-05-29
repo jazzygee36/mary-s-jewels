@@ -1,10 +1,11 @@
 import { axiosInstance } from "./api-client";
 
-interface ResetPasswordPayload {
-  password: string;
+interface ResetPasswordData {
+  token: string;
+  newPassword: string;
 }
 
-export const confirmPassword = async (body: ResetPasswordPayload) => {
-  const response = await axiosInstance.post("/reset-password", body);
-  return response.data;
+export const confirmPassword = async (data: ResetPasswordData) => {
+  const res = await axiosInstance.post("/reset-password", data);
+  return res.data;
 };
