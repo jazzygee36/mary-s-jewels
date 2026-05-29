@@ -77,8 +77,7 @@ export type OrderFormData = z.infer<typeof orderFormSchema>;
 
 export const resetPwdFormData = z
   .object({
-    token: z.string(),
-    newPassword: z
+    password: z
       .string()
       .min(6, "Password must be at least 6 characters")
       .regex(/[A-Z]/, "Must include at least one uppercase letter")
@@ -90,7 +89,7 @@ export const resetPwdFormData = z
       .regex(/[A-Z]/, "Must include at least one uppercase letter")
       .regex(/[0-9]/, "Must include at least one number"),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
     message: "Passwords do not match",
   });

@@ -1,8 +1,7 @@
 import { axiosInstance } from "./api-client";
 
 interface ResetPasswordPayload {
-  token: string;
-  newPassword: string;
+  password: string;
 }
 
 export const confirmPassword = async (body: ResetPasswordPayload) => {

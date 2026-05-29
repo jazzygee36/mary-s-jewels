@@ -16,8 +16,10 @@ import {
 import Toast from "../../components/toast";
 
 import { confirmPassword } from "../../api/reset-password";
+import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info";
@@ -35,9 +37,10 @@ const ResetPassword = () => {
     mutationFn: confirmPassword,
     onSuccess: (data) => {
       setToast({
-        message: data.message || "Reset link has been sent to your email",
+        message: data.message,
         type: "success",
       });
+      navigate("/login");
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
@@ -69,11 +72,8 @@ const ResetPassword = () => {
             </div>
 
             <h2 className="text-[18px] md:text-[18px] font-semibold mt-5 text-[#111111]">
-              Recover your password
+              Reset Your Password
             </h2>
-            <p className="text-[12px] text-[#4B4B4B]">
-              We’ll send instructions to your email to rectify it
-            </p>
 
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -83,11 +83,11 @@ const ResetPassword = () => {
                 type="password"
                 label="New Password"
                 placeholder="New Password"
-                {...register("newPassword")}
+                {...register("password")}
               />
-              {errors.newPassword && (
+              {errors.password && (
                 <p className="text-red-500 text-xs">
-                  {errors.newPassword.message}
+                  {errors.password.message}
                 </p>
               )}
               <HomeInput
@@ -105,7 +105,7 @@ const ResetPassword = () => {
               {/* BUTTON */}
               <HomeButton
                 type="submit"
-                title={mutation.isPending ? "Loading..." : "Recover Password"}
+                title={mutation.isPending ? "Loading..." : "Update Password"}
                 bg="#4C0213"
                 className="text-white rounded-full py-3 mt-4"
               />
