@@ -12,6 +12,7 @@ import PaymentSuccess from "./pages/payment-success";
 import TermsAndConditions from "./pages/terms-and-condition";
 import PrivacyPolicy from "./pages/policy-privacy";
 import ForgetPassword from "./pages/forget-password";
+import ResetPassword from "./pages/reset-password";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         <Route path="/register" element={<SignUp />} />
         <Route path="/terms-&-conditions" element={<TermsAndConditions />} />
         <Route path="/recover-password" element={<ForgetPassword />} />
-        <Route path="/reset-password" element={<ForgetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/all-collections" element={<AllCollection />} />
         <Route path="/login" element={<Login />} />
