@@ -2,21 +2,24 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
 import HomeButton from "../../components/button";
 import Follow from "../../components/follow";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import HomeInput from "../../components/input";
 import BackArrow from "../../assets/icons/back-arrow";
-import { UserLogin } from "../../api/login";
-import { loginFormSchema, type LoginFormData } from "../../utils/validation";
-import Toast from "../../components/toast";
-import { useAuth } from "../../auth/AuthContext";
 
-const Login = () => {
-  const navigate = useNavigate();
-  const { syncAuth } = useAuth();
+import {
+  recoveryFormSchema,
+  type RecoveryFormSchema,
+} from "../../utils/validation";
+import Toast from "../../components/toast";
+
+import { forgetPassword } from "../../api/forget-password";
+
+const ForgetPassword = () => {
+  const [message, setMessage] = useState("");
+
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info";
@@ -26,24 +29,18 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginFormSchema),
+  } = useForm<RecoveryFormSchema>({
+    resolver: zodResolver(recoveryFormSchema),
   });
 
   const mutation = useMutation({
-    mutationFn: UserLogin,
+    mutationFn: forgetPassword,
     onSuccess: (data) => {
       setToast({
-        message: data.message || "Login successful",
+        message: data.message || "Reset link has been sent to your email",
         type: "success",
       });
-
-      sessionStorage.setItem("token", data.accessToken);
-      syncAuth();
-
-      setTimeout(() => {
-        navigate("/");
-      }, 1500); // 1.5 seconds
+      setMessage(data?.message);
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
@@ -59,7 +56,7 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = (data: RecoveryFormSchema) => {
     mutation.mutate(data);
   };
 
@@ -70,17 +67,24 @@ const Login = () => {
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <div className="p-6 md:p-10 bg-white shadow-md rounded-lg">
-            <BackArrow />
+            <div className="my-14 flex items-center gap-4">
+              <BackArrow /> <span className="font-medium">Back</span>
+            </div>
 
-            <h2 className="text-[18px] md:text-[28px] font-semibold mt-5">
-              Login
+            <div className="text-green-700 font-semibold underline">
+              {message}.
+            </div>
+            <h2 className="text-[18px] md:text-[18px] font-semibold mt-5 text-[#111111]">
+              Recover your password
             </h2>
+            <p className="text-[12px] text-[#4B4B4B]">
+              We’ll send instructions to your email to rectify it
+            </p>
 
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mt-5 flex flex-col space-y-3"
+              className="mt-8 flex flex-col space-y-3"
             >
-              {/* EMAIL */}
               <HomeInput
                 type="text"
                 label="Email Address"
@@ -91,43 +95,17 @@ const Login = () => {
                 <p className="text-red-500 text-xs">{errors.email.message}</p>
               )}
 
-              {/* PASSWORD */}
-              <HomeInput
-                type="password"
-                label="Password"
-                placeholder="Password"
-                {...register("password")}
-              />
-              {errors.password && (
-                <p className="text-red-500 text-xs">
-                  {errors.password.message}
-                </p>
-              )}
-
               {/* BUTTON */}
               <HomeButton
-                title={mutation.isPending ? "Logging in..." : "Login"}
+                type="submit"
+                title={mutation.isPending ? "Loading..." : "Recover Password"}
                 bg="#4C0213"
                 className="text-white rounded-full py-3 mt-4"
+                // onClick={() => {
+                //   onSubmit();
+                // }}
               />
             </form>
-
-            <div className="text-sm text-center my-3 cursor-pointer">
-              Lost your password?{" "}
-              <span
-                className="font-semibold  hover:underline"
-                onClick={() => navigate("/recover-password")}
-              >
-                Recover
-              </span>
-            </div>
-            <div
-              className="text-sm text-center my-3 cursor-pointer"
-              onClick={() => navigate("/register")}
-            >
-              Don't have an account?{" "}
-              <span className="font-semibold hover:underline">Signup</span>
-            </div>
           </div>
         </div>
       </div>
@@ -146,4 +124,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgetPassword;
